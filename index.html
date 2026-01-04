@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIOSECURE Compliance Intelligence | TRAUT Applied Research</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #020617 100%); }
+        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); }
+        .glow-cyan { box-shadow: 0 0 40px rgba(34,211,238,0.15); }
+        .glow-red { box-shadow: 0 0 30px rgba(239,68,68,0.2); }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-delayed { animation: float 6s ease-in-out infinite; animation-delay: 2s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .tab-active { border-bottom: 2px solid #22d3ee; color: #22d3ee; }
+        .tab-inactive { border-bottom: 2px solid transparent; color: rgba(255,255,255,0.5); }
+        .risk-critical { background: linear-gradient(135deg, rgba(239,68,68,0.2), rgba(153,27,27,0.1)); border-color: rgba(239,68,68,0.5); }
+        .risk-high { background: linear-gradient(135deg, rgba(249,115,22,0.2), rgba(194,65,12,0.1)); border-color: rgba(249,115,22,0.5); }
+        .risk-medium { background: linear-gradient(135deg, rgba(234,179,8,0.2), rgba(161,98,7,0.1)); border-color: rgba(234,179,8,0.5); }
+        .risk-low { background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(4,120,87,0.1)); border-color: rgba(16,185,129,0.5); }
+        .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-white overflow-x-hidden">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-float-delayed"></div>
+        <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl animate-float" style="animation-delay: 1s;"></div>
+    </div>
+
+    <div id="app" class="relative z-10"></div>
+
+    <script>
+        // ============================================
+        // BIOSECURE COMPLIANCE INTELLIGENCE PLATFORM
+        // TRAUT Applied Research - Powered by ARBITER
+        // ============================================
+
+        // Known BCCs Database
+        const KNOWN_BCC_ENTITIES = [
+            { id: 'bgi', name: 'BGI Genomics', status: '1260H Listed', risk: 'CRITICAL', country: 'China', category: 'Genomics/Sequencing', services: ['Whole genome sequencing', 'Clinical diagnostics', 'Research services'], headquarters: 'Shenzhen', employees: '10,000+', founded: 1999 },
+            { id: 'mgi', name: 'MGI Tech Co.', status: '1260H Listed', risk: 'CRITICAL', country: 'China', category: 'Genomics/Sequencing', services: ['Sequencing instruments', 'Reagents', 'Software'], headquarters: 'Shenzhen', employees: '3,000+', founded: 2016 },
+            { id: 'complete', name: 'Complete Genomics', status: '1260H Listed (BGI Subsidiary)', risk: 'CRITICAL', country: 'China', category: 'Genomics/Sequencing', services: ['DNA sequencing platforms', 'Genomic analysis'], headquarters: 'San Jose', employees: '500+', founded: 2006 },
+            { id: 'wuxi-apptec', name: 'WuXi AppTec', status: 'Pending 1260H (DoD Letter Dec 2025)', risk: 'CRITICAL', country: 'China', category: 'Contract Research/Manufacturing', services: ['Drug discovery', 'Development services', 'Manufacturing'], headquarters: 'Shanghai', employees: '40,000+', founded: 2000 },
+            { id: 'wuxi-bio', name: 'WuXi Biologics', status: 'Under Congressional Review', risk: 'HIGH', country: 'China', category: 'Biologics Manufacturing', services: ['Biologics development', 'Manufacturing', 'Cell line development'], headquarters: 'Wuxi', employees: '12,000+', founded: 2010 },
+            { id: 'wuxi-xdc', name: 'WuXi XDC', status: 'Under Congressional Review', risk: 'HIGH', country: 'China', category: 'Antibody Drug Conjugates', services: ['ADC development', 'Bioconjugation', 'Manufacturing'], headquarters: 'Wuxi', employees: '2,000+', founded: 2018 },
+            { id: 'forensic', name: 'Forensic Genomics International', status: '1260H Listed', risk: 'CRITICAL', country: 'China', category: 'Forensic Genomics', services: ['DNA forensics', 'Genetic identification'], headquarters: 'Shenzhen', employees: '200+', founded: 2010 },
+            { id: 'genscript', name: 'GenScript Biotech', status: 'Monitoring - Potential BCC', risk: 'MEDIUM', country: 'China', category: 'Gene Synthesis/CRO', services: ['Gene synthesis', 'Antibody services', 'Cell therapy'], headquarters: 'Nanjing', employees: '5,000+', founded: 2002 },
+            { id: 'pharmaron', name: 'Pharmaron', status: 'Monitoring - Potential BCC', risk: 'MEDIUM', country: 'China', category: 'Contract Research', services: ['Drug discovery', 'CMC development', 'Clinical services'], headquarters: 'Beijing', employees: '18,000+', founded: 2004 }
+        ];
+
+        // Compliant Alternatives
+        const ALTERNATIVE_SUPPLIERS = [
+            { id: 'thermo', name: 'Thermo Fisher Scientific', country: 'United States', category: 'Genomics/Sequencing', services: ['Sequencing', 'Lab equipment', 'Reagents'], replaces: ['BGI Genomics', 'MGI Tech Co.', 'Complete Genomics'], headquarters: 'Waltham, MA' },
+            { id: 'illumina', name: 'Illumina', country: 'United States', category: 'Genomics/Sequencing', services: ['NGS platforms', 'Sequencing reagents', 'Analysis software'], replaces: ['BGI Genomics', 'MGI Tech Co.', 'Complete Genomics'], headquarters: 'San Diego, CA' },
+            { id: 'lonza', name: 'Lonza', country: 'Switzerland', category: 'Biologics Manufacturing', services: ['Cell & gene therapy', 'Biologics manufacturing', 'CDMO services'], replaces: ['WuXi Biologics', 'WuXi AppTec'], headquarters: 'Basel' },
+            { id: 'catalent', name: 'Catalent', country: 'United States', category: 'Contract Manufacturing', services: ['Drug delivery', 'Development solutions', 'Manufacturing'], replaces: ['WuXi AppTec', 'WuXi Biologics'], headquarters: 'Somerset, NJ' },
+            { id: 'samsung', name: 'Samsung Biologics', country: 'South Korea', category: 'Biologics Manufacturing', services: ['Biologics CMO', 'CDO services', 'Cell line development'], replaces: ['WuXi Biologics'], headquarters: 'Incheon' },
+            { id: 'fuji', name: 'FUJIFILM Diosynth', country: 'Japan', category: 'Biologics Manufacturing', services: ['CDMO services', 'Gene therapy', 'Vaccines'], replaces: ['WuXi Biologics', 'WuXi AppTec'], headquarters: 'Tokyo' },
+            { id: 'charles', name: 'Charles River Laboratories', country: 'United States', category: 'Contract Research', services: ['Preclinical services', 'Safety assessment', 'Discovery'], replaces: ['WuXi AppTec', 'Pharmaron'], headquarters: 'Wilmington, MA' },
+            { id: 'icon', name: 'ICON plc', country: 'Ireland', category: 'Clinical Research', services: ['Clinical trials', 'Data management', 'Regulatory'], replaces: ['WuXi AppTec'], headquarters: 'Dublin' },
+            { id: 'twist', name: 'Twist Bioscience', country: 'United States', category: 'Gene Synthesis', services: ['DNA synthesis', 'NGS tools', 'Antibody discovery'], replaces: ['GenScript Biotech'], headquarters: 'South San Francisco, CA' },
+            { id: 'eurofins', name: 'Eurofins Scientific', country: 'Luxembourg', category: 'Testing/Laboratory', services: ['Bioanalytical testing', 'Genomics', 'Discovery services'], replaces: ['BGI Genomics', 'GenScript Biotech'], headquarters: 'Luxembourg' }
+        ];
+
+        const ADVERSARY_COUNTRIES = ['China', 'Russia', 'North Korea', 'Iran'];
+
+        const TIMELINE_EVENTS = [
+            { date: 'Dec 18, 2024', event: 'BIOSECURE Act Signed', description: 'Section 851 of NDAA FY2025 signed into law', status: 'complete' },
+            { date: 'Jan 2025', event: 'DoD 1260H Update', description: 'BGI, MGI, Complete Genomics confirmed; WuXi AppTec likely added', status: 'complete' },
+            { date: 'Dec 2026', event: 'OMB BCC List Published', description: 'Official Biotechnology Companies of Concern list released', status: 'upcoming' },
+            { date: 'Mid 2027', event: 'FAR Revision', description: 'Federal Acquisition Regulation updated - prohibitions take effect', status: 'upcoming' },
+            { date: '2032', event: 'Grandfathering Ends', description: '5-year safe harbor for pre-existing contracts expires', status: 'upcoming' }
+        ];
+
+        // Application State
+        let state = {
+            activeTab: 'dashboard',
+            companyName: '',
+            suppliers: [],
+            contracts: [],
+            showAddSupplier: false,
+            showAddContract: false,
+            showBCCReference: false,
+            expandedAlternatives: null,
+            searchTerm: '',
+            filterRisk: 'ALL',
+            newSupplier: {
+                name: '', country: '', category: '', services: '',
+                tier: '1', parentSupplier: '', contractDate: '', contractExpiry: '',
+                hasRenewalOption: false, dataAccess: false, notes: ''
+            },
+            newContract: {
+                supplierId: '', contractNumber: '', startDate: '', endDate: '',
+                value: '', hasAutoRenewal: false, renewalOptions: '', clauseText: ''
+            }
+        };
+
+        // ============================================
+        // RISK CALCULATION ENGINE
+        // ============================================
+
+        function calculateSupplierRisk(supplier) {
+            let score = 0;
+            let factors = [];
+
+            // Check against known BCCs
+            const knownMatch = KNOWN_BCC_ENTITIES.find(entity =>
+                supplier.name.toLowerCase().includes(entity.name.toLowerCase().split(' ')[0]) ||
+                entity.name.toLowerCase().includes(supplier.name.toLowerCase().split(' ')[0])
+            );
+
+            if (knownMatch) {
+                return {
+                    score: knownMatch.risk === 'CRITICAL' ? 98 : 85,
+                    level: knownMatch.risk,
+                    match: knownMatch,
+                    factors: [`Matches known BCC: ${knownMatch.name} (${knownMatch.status})`]
+                };
+            }
+
+            // Country risk
+            if (ADVERSARY_COUNTRIES.includes(supplier.country)) {
+                score += 40;
+                factors.push(`Located in foreign adversary country: ${supplier.country}`);
+            }
+
+            // Category risk
+            const highRiskCategories = ['Genomics', 'Sequencing', 'CDMO', 'CRO', 'Biologics', 'Data Services'];
+            if (highRiskCategories.some(cat => supplier.category?.toLowerCase().includes(cat.toLowerCase()))) {
+                score += 20;
+                factors.push(`High-risk service category: ${supplier.category}`);
+            }
+
+            // Data access
+            if (supplier.dataAccess) {
+                score += 15;
+                factors.push('Has access to human genomic/multiomic data');
+            }
+
+            // Tier depth
+            if (supplier.tier === '2') {
+                score += 10;
+                factors.push('Tier 2 supplier - indirect relationship');
+            } else if (supplier.tier === '3') {
+                score += 15;
+                factors.push('Tier 3 supplier - limited visibility');
+            }
+
+            let level = 'LOW';
+            if (score >= 70) level = 'CRITICAL';
+            else if (score >= 50) level = 'HIGH';
+            else if (score >= 30) level = 'MEDIUM';
+
+            return { score: Math.min(100, score), level, match: null, factors };
+        }
+
+        function getGrandfatheringStatus(contract) {
+            if (!contract.startDate) return { eligible: 'UNKNOWN', reason: 'Contract start date not provided' };
+
+            const startDate = new Date(contract.startDate);
+            const actEnactment = new Date('2024-12-18');
+            const estimatedFarRevision = new Date('2027-06-01');
+
+            if (startDate < actEnactment) {
+                const safeHarborEnd = new Date(estimatedFarRevision);
+                safeHarborEnd.setFullYear(safeHarborEnd.getFullYear() + 5);
+                return {
+                    eligible: 'YES',
+                    reason: 'Contract predates Act enactment',
+                    safeHarborEnd: safeHarborEnd.toISOString().split('T')[0]
+                };
+            }
+
+            if (startDate < estimatedFarRevision) {
+                return {
+                    eligible: 'LIKELY',
+                    reason: 'Contract may predate FAR revision - monitor closely'
+                };
+            }
+
+            return { eligible: 'NO', reason: 'Contract entered after expected FAR revision' };
+        }
+
+        function findAlternatives(supplier) {
+            return ALTERNATIVE_SUPPLIERS.filter(alt => {
+                if (supplier.category && alt.category.toLowerCase().includes(supplier.category.toLowerCase().split('/')[0])) {
+                    return true;
+                }
+                if (alt.replaces.some(r => supplier.name.toLowerCase().includes(r.toLowerCase().split(' ')[0]))) {
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        function analyzeContractClause(clause) {
+            const riskIndicators = [
+                { pattern: /data.*transfer|transfer.*data/i, risk: 'Data may be transferred to foreign jurisdiction', severity: 'HIGH' },
+                { pattern: /exclusive|sole.*provider/i, risk: 'Exclusive arrangement limits transition options', severity: 'MEDIUM' },
+                { pattern: /perpetual|indefinite/i, risk: 'No defined end date complicates grandfathering', severity: 'MEDIUM' },
+                { pattern: /automatic.*renew/i, risk: 'Auto-renewal may extend beyond safe harbor', severity: 'HIGH' },
+                { pattern: /genomic|sequencing|multiomic/i, risk: 'Involves covered biotechnology services', severity: 'HIGH' },
+                { pattern: /subcontract|third.*party/i, risk: 'May involve undisclosed Tier 2/3 suppliers', severity: 'MEDIUM' },
+                { pattern: /intellectual.*property.*transfer/i, risk: 'IP transfer to foreign entity', severity: 'HIGH' }
+            ];
+
+            return riskIndicators.filter(indicator => indicator.pattern.test(clause));
+        }
+
+        // ============================================
+        // COMPUTED VALUES
+        // ============================================
+
+        function getRiskStats() {
+            return {
+                critical: state.suppliers.filter(s => s.risk.level === 'CRITICAL').length,
+                high: state.suppliers.filter(s => s.risk.level === 'HIGH').length,
+                medium: state.suppliers.filter(s => s.risk.level === 'MEDIUM').length,
+                low: state.suppliers.filter(s => s.risk.level === 'LOW').length,
+                total: state.suppliers.length,
+                tier1: state.suppliers.filter(s => s.tier === '1').length,
+                tier2: state.suppliers.filter(s => s.tier === '2').length,
+                tier3: state.suppliers.filter(s => s.tier === '3').length
+            };
+        }
+
+        function getContractStats() {
+            return {
+                total: state.contracts.length,
+                grandfathered: state.contracts.filter(c => c.grandfathering?.eligible === 'YES').length,
+                atRisk: state.contracts.filter(c => c.grandfathering?.eligible === 'NO').length,
+                pending: state.contracts.filter(c => ['LIKELY', 'UNKNOWN'].includes(c.grandfathering?.eligible)).length
+            };
+        }
+
+        function getFilteredSuppliers() {
+            return state.suppliers.filter(s => {
+                const matchesSearch = s.name.toLowerCase().includes(state.searchTerm.toLowerCase());
+                const matchesFilter = state.filterRisk === 'ALL' || s.risk.level === state.filterRisk;
+                return matchesSearch && matchesFilter;
+            });
+        }
+
+        // ============================================
+        // ACTIONS
+        // ============================================
+
+        function addSupplier() {
+            if (state.newSupplier.name && state.newSupplier.country) {
+                const risk = calculateSupplierRisk(state.newSupplier);
+                const alternatives = findAlternatives(state.newSupplier);
+                const supplier = {
+                    ...state.newSupplier,
+                    id: Date.now(),
+                    risk,
+                    alternatives,
+                    addedDate: new Date().toISOString()
+                };
+                state.suppliers.push(supplier);
+                state.newSupplier = {
+                    name: '', country: '', category: '', services: '',
+                    tier: '1', parentSupplier: '', contractDate: '', contractExpiry: '',
+                    hasRenewalOption: false, dataAccess: false, notes: ''
+                };
+                state.showAddSupplier = false;
+                render();
+            }
+        }
+
+        function removeSupplier(id) {
+            state.suppliers = state.suppliers.filter(s => s.id !== id);
+            state.contracts = state.contracts.filter(c => c.supplierId !== id);
+            render();
+        }
+
+        function addContract() {
+            if (state.newContract.supplierId && state.newContract.startDate) {
+                const grandfathering = getGrandfatheringStatus(state.newContract);
+                const clauseFindings = state.newContract.clauseText ? analyzeContractClause(state.newContract.clauseText) : [];
+                const contract = {
+                    ...state.newContract,
+                    id: Date.now(),
+                    grandfathering,
+                    clauseFindings
+                };
+                state.contracts.push(contract);
+                state.newContract = {
+                    supplierId: '', contractNumber: '', startDate: '', endDate: '',
+                    value: '', hasAutoRenewal: false, renewalOptions: '', clauseText: ''
+                };
+                state.showAddContract = false;
+                render();
+            }
+        }
+
+        function setTab(tab) {
+            state.activeTab = tab;
+            render();
+        }
+
+        // ============================================
+        // RENDER HELPERS
+        // ============================================
+
+        function getRiskColorClass(level) {
+            switch (level) {
+                case 'CRITICAL': return 'risk-critical border';
+                case 'HIGH': return 'risk-high border';
+                case 'MEDIUM': return 'risk-medium border';
+                default: return 'risk-low border';
+            }
+        }
+
+        function getRiskBadgeClass(level) {
+            switch (level) {
+                case 'CRITICAL': return 'bg-red-500 text-white';
+                case 'HIGH': return 'bg-orange-500 text-white';
+                case 'MEDIUM': return 'bg-yellow-500 text-black';
+                default: return 'bg-emerald-500 text-white';
+            }
+        }
+
+        function getRiskTextClass(level) {
+            switch (level) {
+                case 'CRITICAL': return 'text-red-400';
+                case 'HIGH': return 'text-orange-400';
+                case 'MEDIUM': return 'text-yellow-400';
+                default: return 'text-emerald-400';
+            }
+        }
+
+        // ============================================
+        // RENDER FUNCTIONS
+        // ============================================
+
+        function renderDashboard() {
+            const stats = getRiskStats();
+            const contractStats = getContractStats();
+
+            return `
+                <div class="space-y-6">
+                    <!-- Risk Metrics -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="p-5 rounded-2xl bg-gradient-to-br from-red-500/20 to-red-600/10 border border-red-500/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <i data-lucide="x-circle" class="w-6 h-6 text-red-400"></i>
+                                <span class="text-xs text-red-300 uppercase tracking-wider">Critical</span>
+                            </div>
+                            <div class="text-4xl font-bold text-red-400">${stats.critical}</div>
+                            <div class="text-sm text-red-300/60 mt-1">Immediate action</div>
+                        </div>
+                        <div class="p-5 rounded-2xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <i data-lucide="alert-triangle" class="w-6 h-6 text-orange-400"></i>
+                                <span class="text-xs text-orange-300 uppercase tracking-wider">High</span>
+                            </div>
+                            <div class="text-4xl font-bold text-orange-400">${stats.high}</div>
+                            <div class="text-sm text-orange-300/60 mt-1">Review before OMB</div>
+                        </div>
+                        <div class="p-5 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 border border-yellow-500/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <i data-lucide="alert-circle" class="w-6 h-6 text-yellow-400"></i>
+                                <span class="text-xs text-yellow-300 uppercase tracking-wider">Medium</span>
+                            </div>
+                            <div class="text-4xl font-bold text-yellow-400">${stats.medium}</div>
+                            <div class="text-sm text-yellow-300/60 mt-1">Monitor closely</div>
+                        </div>
+                        <div class="p-5 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <i data-lucide="check-circle" class="w-6 h-6 text-emerald-400"></i>
+                                <span class="text-xs text-emerald-300 uppercase tracking-wider">Low</span>
+                            </div>
+                            <div class="text-4xl font-bold text-emerald-400">${stats.low}</div>
+                            <div class="text-sm text-emerald-300/60 mt-1">Compliant</div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline & Contracts -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Timeline -->
+                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <i data-lucide="clock" class="w-5 h-5 text-cyan-400"></i>
+                                BIOSECURE Act Timeline
+                            </h3>
+                            <div class="space-y-4">
+                                ${TIMELINE_EVENTS.map(item => `
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-3 h-3 rounded-full mt-1.5 ring-4 ${item.status === 'complete' ? 'bg-emerald-500 ring-emerald-500/20' : 'bg-cyan-500 ring-cyan-500/20'}"></div>
+                                        <div>
+                                            <div class="font-medium ${item.status === 'complete' ? 'text-emerald-400' : 'text-cyan-400'}">${item.date}</div>
+                                            <div class="text-sm text-white/60">${item.description}</div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Contract Status -->
+                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <i data-lucide="file-check" class="w-5 h-5 text-cyan-400"></i>
+                                Contract Grandfathering
+                            </h3>
+                            ${state.contracts.length === 0 ? `
+                                <div class="text-center py-8 text-white/40">
+                                    <i data-lucide="file-text" class="w-12 h-12 mx-auto mb-3 opacity-30"></i>
+                                    <p>No contracts added yet</p>
+                                    <button onclick="state.activeTab='contracts';state.showAddContract=true;render();" class="mt-3 text-cyan-400 hover:text-cyan-300 text-sm">
+                                        Add your first contract →
+                                    </button>
+                                </div>
+                            ` : `
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                                        <div class="flex items-center gap-2">
+                                            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
+                                            <span>Grandfathered</span>
+                                        </div>
+                                        <span class="text-2xl font-bold text-emerald-400">${contractStats.grandfathered}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/30">
+                                        <div class="flex items-center gap-2">
+                                            <i data-lucide="alert-circle" class="w-5 h-5 text-yellow-400"></i>
+                                            <span>Pending Review</span>
+                                        </div>
+                                        <span class="text-2xl font-bold text-yellow-400">${contractStats.pending}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 rounded-xl bg-red-500/10 border border-red-500/30">
+                                        <div class="flex items-center gap-2">
+                                            <i data-lucide="x-circle" class="w-5 h-5 text-red-400"></i>
+                                            <span>Transition Required</span>
+                                        </div>
+                                        <span class="text-2xl font-bold text-red-400">${contractStats.atRisk}</span>
+                                    </div>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+
+                    <!-- Supply Chain Tiers -->
+                    <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <i data-lucide="layers" class="w-5 h-5 text-cyan-400"></i>
+                            Supply Chain Visibility
+                        </h3>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="text-center p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30">
+                                <div class="text-3xl font-bold text-cyan-400">${stats.tier1}</div>
+                                <div class="text-sm text-cyan-300/70 mt-1">Tier 1 (Direct)</div>
+                            </div>
+                            <div class="text-center p-4 rounded-xl bg-violet-500/10 border border-violet-500/30">
+                                <div class="text-3xl font-bold text-violet-400">${stats.tier2}</div>
+                                <div class="text-sm text-violet-300/70 mt-1">Tier 2 (Indirect)</div>
+                            </div>
+                            <div class="text-center p-4 rounded-xl bg-pink-500/10 border border-pink-500/30">
+                                <div class="text-3xl font-bold text-pink-400">${stats.tier3}</div>
+                                <div class="text-sm text-pink-300/70 mt-1">Tier 3 (Deep)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Critical Findings -->
+                    ${(stats.critical > 0 || stats.high > 0) ? `
+                        <div class="p-6 rounded-2xl bg-red-500/10 border border-red-500/30">
+                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2 text-red-300">
+                                <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                                Critical Findings Requiring Action
+                            </h3>
+                            <div class="space-y-3">
+                                ${state.suppliers.filter(s => s.risk.level === 'CRITICAL' || s.risk.level === 'HIGH').map(supplier => `
+                                    <div class="p-4 rounded-xl bg-black/20 border border-red-500/20">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <div class="flex items-center gap-3">
+                                                <span class="font-semibold">${supplier.name}</span>
+                                                <span class="text-xs px-2 py-0.5 rounded-full ${getRiskBadgeClass(supplier.risk.level)}">${supplier.risk.level}</span>
+                                            </div>
+                                            <span class="text-2xl font-bold text-red-400">${supplier.risk.score}%</span>
+                                        </div>
+                                        <div class="text-sm text-white/60 mb-2">${supplier.country} • ${supplier.category} • Tier ${supplier.tier}</div>
+                                        ${supplier.risk.factors?.length ? `
+                                            <ul class="text-sm text-red-300/80 space-y-1">
+                                                ${supplier.risk.factors.map(f => `<li>• ${f}</li>`).join('')}
+                                            </ul>
+                                        ` : ''}
+                                        ${supplier.alternatives?.length ? `
+                                            <div class="mt-3 pt-3 border-t border-red-500/20">
+                                                <button onclick="state.expandedAlternatives = state.expandedAlternatives === ${supplier.id} ? null : ${supplier.id}; render();" class="text-sm text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+                                                    <i data-lucide="lightbulb" class="w-4 h-4"></i>
+                                                    ${supplier.alternatives.length} compliant alternative${supplier.alternatives.length > 1 ? 's' : ''}
+                                                    <i data-lucide="${state.expandedAlternatives === supplier.id ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4"></i>
+                                                </button>
+                                                ${state.expandedAlternatives === supplier.id ? `
+                                                    <div class="mt-2 grid gap-2">
+                                                        ${supplier.alternatives.map(alt => `
+                                                            <div class="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
+                                                                <div class="flex items-center justify-between">
+                                                                    <span class="font-medium text-emerald-300">${alt.name}</span>
+                                                                    <span class="text-xs text-emerald-400">${alt.country}</span>
+                                                                </div>
+                                                                <div class="text-xs text-white/50 mt-1">${alt.services.join(' • ')}</div>
+                                                            </div>
+                                                        `).join('')}
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function renderSuppliers() {
+            const filtered = getFilteredSuppliers();
+
+            return `
+                <div class="space-y-6">
+                    <!-- Controls -->
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1 relative">
+                            <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30"></i>
+                            <input type="text" placeholder="Search suppliers..." value="${state.searchTerm}" oninput="state.searchTerm=this.value;render();" class="w-full pl-12 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none transition-all">
+                        </div>
+                        <select onchange="state.filterRisk=this.value;render();" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                            <option value="ALL" ${state.filterRisk === 'ALL' ? 'selected' : ''}>All Risk Levels</option>
+                            <option value="CRITICAL" ${state.filterRisk === 'CRITICAL' ? 'selected' : ''}>Critical Only</option>
+                            <option value="HIGH" ${state.filterRisk === 'HIGH' ? 'selected' : ''}>High Only</option>
+                            <option value="MEDIUM" ${state.filterRisk === 'MEDIUM' ? 'selected' : ''}>Medium Only</option>
+                            <option value="LOW" ${state.filterRisk === 'LOW' ? 'selected' : ''}>Low Only</option>
+                        </select>
+                        <button onclick="state.showAddSupplier=true;render();" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold transition-all">
+                            <i data-lucide="plus" class="w-5 h-5"></i>
+                            Add Supplier
+                        </button>
+                    </div>
+
+                    <!-- Add Supplier Form -->
+                    ${state.showAddSupplier ? `
+                        <div class="p-6 rounded-2xl bg-white/5 border border-cyan-500/30">
+                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <i data-lucide="building-2" class="w-5 h-5 text-cyan-400"></i>
+                                Add New Supplier
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <input type="text" placeholder="Supplier Name *" value="${state.newSupplier.name}" oninput="state.newSupplier.name=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                <select onchange="state.newSupplier.country=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                    <option value="">Select Country *</option>
+                                    <option value="China">🇨🇳 China</option>
+                                    <option value="Russia">🇷🇺 Russia</option>
+                                    <option value="North Korea">🇰🇵 North Korea</option>
+                                    <option value="Iran">🇮🇷 Iran</option>
+                                    <option value="United States">🇺🇸 United States</option>
+                                    <option value="Germany">🇩🇪 Germany</option>
+                                    <option value="United Kingdom">🇬🇧 United Kingdom</option>
+                                    <option value="Switzerland">🇨🇭 Switzerland</option>
+                                    <option value="Japan">🇯🇵 Japan</option>
+                                    <option value="South Korea">🇰🇷 South Korea</option>
+                                    <option value="India">🇮🇳 India</option>
+                                    <option value="Ireland">🇮🇪 Ireland</option>
+                                    <option value="Singapore">🇸🇬 Singapore</option>
+                                </select>
+                                <select onchange="state.newSupplier.category=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                    <option value="">Select Category *</option>
+                                    <option value="Contract Research Organization (CRO)">CRO</option>
+                                    <option value="Contract Development & Manufacturing (CDMO)">CDMO</option>
+                                    <option value="Genomics/Sequencing">Genomics/Sequencing</option>
+                                    <option value="Biologics Manufacturing">Biologics Manufacturing</option>
+                                    <option value="Data Services/Storage">Data Services</option>
+                                    <option value="Gene Synthesis">Gene Synthesis</option>
+                                    <option value="Clinical Trial Services">Clinical Trials</option>
+                                    <option value="API Manufacturing">API Manufacturing</option>
+                                </select>
+                                <select onchange="state.newSupplier.tier=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                    <option value="1">Tier 1 - Direct Supplier</option>
+                                    <option value="2">Tier 2 - Supplier's Supplier</option>
+                                    <option value="3">Tier 3 - Extended Chain</option>
+                                </select>
+                                <input type="text" placeholder="Services Provided" oninput="state.newSupplier.services=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                <label class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10">
+                                    <input type="checkbox" onchange="state.newSupplier.dataAccess=this.checked" class="w-4 h-4 rounded">
+                                    <span class="text-white/70 text-sm">Access to Genomic Data</span>
+                                </label>
+                            </div>
+                            <div class="flex gap-3">
+                                <button onclick="addSupplier()" class="px-6 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold transition-all">
+                                    Analyze & Add
+                                </button>
+                                <button onclick="state.showAddSupplier=false;render();" class="px-6 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- Known BCCs Reference -->
+                    <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                        <button onclick="state.showBCCReference=!state.showBCCReference;render();" class="w-full flex items-center justify-between text-left">
+                            <span class="font-medium text-white/70 flex items-center gap-2">
+                                <i data-lucide="database" class="w-5 h-5 text-red-400"></i>
+                                Known Biotechnology Companies of Concern (${KNOWN_BCC_ENTITIES.length})
+                            </span>
+                            <i data-lucide="${state.showBCCReference ? 'chevron-up' : 'chevron-down'}" class="w-5 h-5"></i>
+                        </button>
+                        ${state.showBCCReference ? `
+                            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                ${KNOWN_BCC_ENTITIES.map(entity => `
+                                    <div class="p-4 rounded-xl ${getRiskColorClass(entity.risk)}">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="font-semibold">${entity.name}</span>
+                                            <span class="text-xs px-2 py-0.5 rounded-full ${getRiskBadgeClass(entity.risk)}">${entity.risk}</span>
+                                        </div>
+                                        <div class="text-sm opacity-70 space-y-1">
+                                            <div>${entity.country} • ${entity.headquarters}</div>
+                                            <div>${entity.category}</div>
+                                            <div class="text-xs">${entity.status}</div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <!-- Supplier List -->
+                    <div class="space-y-3">
+                        ${filtered.length === 0 ? `
+                            <div class="text-center py-16 text-white/40">
+                                <i data-lucide="building-2" class="w-16 h-16 mx-auto mb-4 opacity-30"></i>
+                                <p class="text-lg">No suppliers found</p>
+                                <p class="text-sm">Add suppliers to assess BIOSECURE compliance risk</p>
+                            </div>
+                        ` : filtered.map(supplier => `
+                            <div class="p-5 rounded-xl ${getRiskColorClass(supplier.risk.level)}">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <span class="font-semibold text-lg">${supplier.name}</span>
+                                            <span class="text-xs px-2 py-0.5 rounded-full ${getRiskBadgeClass(supplier.risk.level)}">${supplier.risk.level}</span>
+                                            <span class="text-xs px-2 py-0.5 rounded-full bg-white/10">Tier ${supplier.tier}</span>
+                                        </div>
+                                        <div class="text-sm opacity-70 flex flex-wrap gap-x-4">
+                                            <span>${supplier.country}</span>
+                                            <span>${supplier.category}</span>
+                                            ${supplier.dataAccess ? '<span class="text-red-300">⚠️ Genomic Data Access</span>' : ''}
+                                        </div>
+                                        ${supplier.risk.factors?.length ? `
+                                            <div class="mt-3 space-y-1">
+                                                ${supplier.risk.factors.map(f => `<div class="text-sm opacity-80">• ${f}</div>`).join('')}
+                                            </div>
+                                        ` : ''}
+                                        ${supplier.risk.match ? `
+                                            <div class="mt-3 p-3 rounded-lg bg-black/20 text-sm">
+                                                <span class="font-semibold text-red-300">⚠️ Matches Known BCC:</span>
+                                                <span class="ml-2">${supplier.risk.match.name} (${supplier.risk.match.status})</span>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                    <div class="text-right flex flex-col items-end gap-2">
+                                        <div class="text-3xl font-bold">${supplier.risk.score}%</div>
+                                        <div class="text-xs uppercase tracking-wider opacity-70">Risk Score</div>
+                                        <button onclick="removeSupplier(${supplier.id})" class="mt-2 p-2 rounded-lg hover:bg-black/20 transition-all opacity-50 hover:opacity-100">
+                                            <i data-lucide="trash-2" class="w-5 h-5"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                ${supplier.alternatives?.length ? `
+                                    <div class="mt-4 pt-4 border-t border-current/20">
+                                        <button onclick="state.expandedAlternatives = state.expandedAlternatives === ${supplier.id} ? null : ${supplier.id}; render();" class="text-sm flex items-center gap-2 hover:opacity-80">
+                                            <i data-lucide="lightbulb" class="w-4 h-4"></i>
+                                            ${supplier.alternatives.length} Compliant Alternative${supplier.alternatives.length > 1 ? 's' : ''}
+                                            <i data-lucide="${state.expandedAlternatives === supplier.id ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4"></i>
+                                        </button>
+                                        ${state.expandedAlternatives === supplier.id ? `
+                                            <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+                                                ${supplier.alternatives.map(alt => `
+                                                    <div class="p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/40">
+                                                        <div class="flex items-center justify-between mb-1">
+                                                            <span class="font-medium text-emerald-300">${alt.name}</span>
+                                                            <span class="text-xs bg-emerald-500/30 px-2 py-0.5 rounded-full">${alt.country}</span>
+                                                        </div>
+                                                        <div class="text-xs text-emerald-200/60">${alt.headquarters}</div>
+                                                        <div class="text-xs text-emerald-200/50 mt-1">${alt.services.slice(0, 3).join(' • ')}</div>
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderContracts() {
+            return `
+                <div class="space-y-6">
+                    <!-- Controls -->
+                    <div class="flex gap-4">
+                        <button onclick="state.showAddContract=true;render();" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold transition-all">
+                            <i data-lucide="plus" class="w-5 h-5"></i>
+                            Add Contract
+                        </button>
+                    </div>
+
+                    <!-- Add Contract Form -->
+                    ${state.showAddContract ? `
+                        <div class="p-6 rounded-2xl bg-white/5 border border-cyan-500/30">
+                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <i data-lucide="file-text" class="w-5 h-5 text-cyan-400"></i>
+                                Add Contract for Analysis
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <select onchange="state.newContract.supplierId=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                    <option value="">Select Supplier *</option>
+                                    ${state.suppliers.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}
+                                </select>
+                                <input type="text" placeholder="Contract Number" oninput="state.newContract.contractNumber=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                <input type="text" placeholder="Contract Value" oninput="state.newContract.value=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                <div>
+                                    <label class="text-xs text-white/50 block mb-1">Start Date *</label>
+                                    <input type="date" onchange="state.newContract.startDate=this.value" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="text-xs text-white/50 block mb-1">End Date</label>
+                                    <input type="date" onchange="state.newContract.endDate=this.value" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                </div>
+                                <label class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10">
+                                    <input type="checkbox" onchange="state.newContract.hasAutoRenewal=this.checked" class="w-4 h-4 rounded">
+                                    <span class="text-white/70 text-sm">Auto-renewal clause</span>
+                                </label>
+                            </div>
+                            <div class="mb-4">
+                                <label class="text-sm text-white/70 block mb-2">Contract Clause Text (for ARBITER analysis)</label>
+                                <textarea placeholder="Paste relevant contract clauses..." oninput="state.newContract.clauseText=this.value" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none h-32 resize-none font-mono text-sm"></textarea>
+                            </div>
+                            <div class="flex gap-3">
+                                <button onclick="addContract()" class="px-6 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold transition-all">
+                                    Analyze Contract
+                                </button>
+                                <button onclick="state.showAddContract=false;render();" class="px-6 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- Grandfathering Info -->
+                    <div class="p-5 rounded-xl bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/30">
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="info" class="w-6 h-6 text-violet-400 flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <h4 class="font-semibold text-violet-300 mb-1">Grandfathering Rules (5-Year Safe Harbor)</h4>
+                                <p class="text-sm text-white/60">
+                                    Contracts entered into <strong>before</strong> the FAR revision (~mid 2027) are grandfathered for 5 years. 
+                                    Contracts with companies on the 1260H list as of Dec 18, 2024 do NOT receive safe harbor protection.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contract List -->
+                    <div class="space-y-4">
+                        ${state.contracts.length === 0 ? `
+                            <div class="text-center py-16 text-white/40">
+                                <i data-lucide="file-text" class="w-16 h-16 mx-auto mb-4 opacity-30"></i>
+                                <p class="text-lg">No contracts added yet</p>
+                                <p class="text-sm">Add contracts to analyze grandfathering eligibility</p>
+                            </div>
+                        ` : state.contracts.map(contract => {
+                            const supplier = state.suppliers.find(s => s.id.toString() === contract.supplierId);
+                            return `
+                                <div class="p-5 rounded-xl bg-white/5 border border-white/10">
+                                    <div class="flex items-start justify-between mb-4">
+                                        <div>
+                                            <div class="flex items-center gap-3 mb-1">
+                                                <i data-lucide="file-text" class="w-5 h-5 text-cyan-400"></i>
+                                                <span class="font-semibold">${contract.contractNumber || 'Contract'}</span>
+                                                ${supplier ? `<span class="text-sm text-white/50">with ${supplier.name}</span>` : ''}
+                                            </div>
+                                            <div class="text-sm text-white/50">
+                                                ${contract.startDate} → ${contract.endDate || 'No end date'}
+                                                ${contract.value ? ` • ${contract.value}` : ''}
+                                                ${contract.hasAutoRenewal ? ' • ⚠️ Auto-renewal' : ''}
+                                            </div>
+                                        </div>
+                                        <div class="px-3 py-1 rounded-lg text-sm font-medium ${
+                                            contract.grandfathering?.eligible === 'YES' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
+                                            contract.grandfathering?.eligible === 'NO' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
+                                            'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
+                                        }">
+                                            ${contract.grandfathering?.eligible === 'YES' ? '✓ Grandfathered' :
+                                              contract.grandfathering?.eligible === 'NO' ? '✗ Not Eligible' : '? Pending'}
+                                        </div>
+                                    </div>
+                                    <div class="p-3 rounded-lg bg-black/20 mb-4">
+                                        <div class="text-sm">
+                                            <span class="text-white/50">Status: </span>
+                                            <span>${contract.grandfathering?.reason || 'Unknown'}</span>
+                                        </div>
+                                        ${contract.grandfathering?.safeHarborEnd ? `
+                                            <div class="text-sm mt-1">
+                                                <span class="text-white/50">Safe Harbor Ends: </span>
+                                                <span class="text-emerald-400">${contract.grandfathering.safeHarborEnd}</span>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                    ${contract.clauseFindings?.length ? `
+                                        <div class="space-y-2">
+                                            <h5 class="text-sm font-medium text-white/70 flex items-center gap-2">
+                                                <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i>
+                                                ARBITER Clause Analysis
+                                            </h5>
+                                            ${contract.clauseFindings.map(finding => `
+                                                <div class="p-3 rounded-lg border ${finding.severity === 'HIGH' ? 'bg-red-500/10 border-red-500/30' : 'bg-yellow-500/10 border-yellow-500/30'}">
+                                                    <div class="flex items-center gap-2 text-sm">
+                                                        <i data-lucide="${finding.severity === 'HIGH' ? 'alert-triangle' : 'alert-circle'}" class="w-4 h-4 ${finding.severity === 'HIGH' ? 'text-red-400' : 'text-yellow-400'}"></i>
+                                                        <span class="${finding.severity === 'HIGH' ? 'text-red-300' : 'text-yellow-300'}">${finding.risk}</span>
+                                                    </div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAlternatives() {
+            return `
+                <div class="space-y-6">
+                    <div class="p-5 rounded-xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="lightbulb" class="w-6 h-6 text-emerald-400 flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <h4 class="font-semibold text-emerald-300 mb-1">Compliant Alternative Suppliers</h4>
+                                <p class="text-sm text-white/60">
+                                    Pre-vetted suppliers from non-adversary countries that can replace high-risk BCCs.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${ALTERNATIVE_SUPPLIERS.map(alt => `
+                            <div class="p-5 rounded-xl bg-emerald-500/5 border border-emerald-500/20 hover:border-emerald-500/40 transition-all">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="font-semibold text-lg">${alt.name}</h4>
+                                    <span class="text-xs px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-300">${alt.country}</span>
+                                </div>
+                                <div class="space-y-2 text-sm">
+                                    <div class="text-white/60">${alt.headquarters}</div>
+                                    <div class="text-white/60">${alt.category}</div>
+                                    <div class="flex flex-wrap gap-1 mt-2">
+                                        ${alt.services.map(svc => `<span class="text-xs px-2 py-0.5 rounded-full bg-white/10 text-white/60">${svc}</span>`).join('')}
+                                    </div>
+                                    <div class="pt-3 border-t border-emerald-500/20 mt-3">
+                                        <div class="text-xs text-white/40 mb-1">Can replace:</div>
+                                        <div class="flex flex-wrap gap-1">
+                                            ${alt.replaces.map(r => `<span class="text-xs px-2 py-0.5 rounded-full bg-red-500/20 text-red-300">${r}</span>`).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderWaivers() {
+            return `
+                <div class="space-y-6">
+                    <div class="p-5 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30">
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="scale" class="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <h4 class="font-semibold text-amber-300 mb-1">Waiver & Removal Process</h4>
+                                <p class="text-sm text-white/60">
+                                    Waivers may be granted when no viable alternative exists. BCCs can also request removal from the list.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Waiver Criteria -->
+                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <i data-lucide="file-check" class="w-5 h-5 text-cyan-400"></i>
+                                Potential Waiver Criteria
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="p-3 rounded-lg bg-white/5 border border-white/10">
+                                    <div class="font-medium text-white/80 mb-1">No Viable Alternative</div>
+                                    <div class="text-sm text-white/50">No domestic or allied supplier can provide equivalent services</div>
+                                </div>
+                                <div class="p-3 rounded-lg bg-white/5 border border-white/10">
+                                    <div class="font-medium text-white/80 mb-1">National Security Exception</div>
+                                    <div class="text-sm text-white/50">Certain intelligence activities may be exempted</div>
+                                </div>
+                                <div class="p-3 rounded-lg bg-white/5 border border-white/10">
+                                    <div class="font-medium text-white/80 mb-1">Public Health Emergency</div>
+                                    <div class="text-sm text-white/50">Declared emergencies may trigger temporary exceptions</div>
+                                </div>
+                                <div class="p-3 rounded-lg bg-white/5 border border-white/10">
+                                    <div class="font-medium text-white/80 mb-1">Overseas Healthcare</div>
+                                    <div class="text-sm text-white/50">Healthcare for US personnel stationed overseas</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Removal Process -->
+                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <i data-lucide="refresh-cw" class="w-5 h-5 text-cyan-400"></i>
+                                BCC Removal Request Process
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center text-xs font-bold text-slate-900">1</div>
+                                    <div>
+                                        <div class="font-medium text-white/80">Submit Request to OMB</div>
+                                        <div class="text-sm text-white/50">BCCs can request removal from the list</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center text-xs font-bold text-slate-900">2</div>
+                                    <div>
+                                        <div class="font-medium text-white/80">Provide Documentation</div>
+                                        <div class="text-sm text-white/50">Evidence that criteria no longer apply</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center text-xs font-bold text-slate-900">3</div>
+                                    <div>
+                                        <div class="font-medium text-white/80">Interagency Review</div>
+                                        <div class="text-sm text-white/50">OMB coordinates across agencies</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center text-xs font-bold text-slate-900">4</div>
+                                    <div>
+                                        <div class="font-medium text-white/80">Decision</div>
+                                        <div class="text-sm text-white/50">OMB updates list if approved</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Your Suppliers Analysis -->
+                    ${state.suppliers.filter(s => ['CRITICAL', 'HIGH'].includes(s.risk.level)).length > 0 ? `
+                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <i data-lucide="target" class="w-5 h-5 text-cyan-400"></i>
+                                Your Suppliers - Waiver Consideration
+                            </h3>
+                            <div class="space-y-3">
+                                ${state.suppliers.filter(s => ['CRITICAL', 'HIGH'].includes(s.risk.level)).map(supplier => `
+                                    <div class="p-4 rounded-xl bg-black/20 border border-white/10">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="font-medium">${supplier.name}</span>
+                                            <span class="text-xs px-2 py-0.5 rounded-full ${getRiskBadgeClass(supplier.risk.level)}">${supplier.risk.level}</span>
+                                        </div>
+                                        <div class="text-sm text-white/60 mb-3">${supplier.category} • ${supplier.country}</div>
+                                        <div class="flex items-center gap-2">
+                                            ${supplier.alternatives?.length ? `
+                                                <span class="text-xs text-red-300 flex items-center gap-1">
+                                                    <i data-lucide="x-circle" class="w-4 h-4"></i>
+                                                    ${supplier.alternatives.length} alternatives exist - waiver unlikely
+                                                </span>
+                                            ` : `
+                                                <span class="text-xs text-emerald-300 flex items-center gap-1">
+                                                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                                                    No alternatives - may qualify for waiver
+                                                </span>
+                                            `}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // ============================================
+        // MAIN RENDER
+        // ============================================
+
+        function render() {
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                <!-- Header -->
+                <header class="border-b border-white/10 backdrop-blur-xl sticky top-0 z-50">
+                    <div class="max-w-7xl mx-auto px-6 py-5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="relative">
+                                    <div class="absolute inset-0 bg-cyan-500 blur-xl opacity-50"></div>
+                                    <i data-lucide="shield" class="w-10 h-10 text-cyan-400 relative"></i>
+                                </div>
+                                <div>
+                                    <h1 class="text-2xl font-bold tracking-tight">
+                                        <span class="text-cyan-400">BIOSECURE</span>
+                                        <span class="text-white/80 ml-2">Compliance Intelligence</span>
+                                    </h1>
+                                    <p class="text-sm text-white/50">Powered by ARBITER • TRAUT Applied Research</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <input type="text" placeholder="Company Name" value="${state.companyName}" oninput="state.companyName=this.value" class="px-4 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none text-sm w-48">
+                                <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="max-w-7xl mx-auto px-6">
+                        <nav class="flex gap-1">
+                            <button onclick="setTab('dashboard')" class="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all ${state.activeTab === 'dashboard' ? 'tab-active' : 'tab-inactive'}">
+                                <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                                Dashboard
+                            </button>
+                            <button onclick="setTab('suppliers')" class="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all ${state.activeTab === 'suppliers' ? 'tab-active' : 'tab-inactive'}">
+                                <i data-lucide="building-2" class="w-4 h-4"></i>
+                                Suppliers
+                            </button>
+                            <button onclick="setTab('contracts')" class="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all ${state.activeTab === 'contracts' ? 'tab-active' : 'tab-inactive'}">
+                                <i data-lucide="file-text" class="w-4 h-4"></i>
+                                Contracts
+                            </button>
+                            <button onclick="setTab('alternatives')" class="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all ${state.activeTab === 'alternatives' ? 'tab-active' : 'tab-inactive'}">
+                                <i data-lucide="lightbulb" class="w-4 h-4"></i>
+                                Alternatives
+                            </button>
+                            <button onclick="setTab('waivers')" class="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all ${state.activeTab === 'waivers' ? 'tab-active' : 'tab-inactive'}">
+                                <i data-lucide="scale" class="w-4 h-4"></i>
+                                Waivers
+                            </button>
+                        </nav>
+                    </div>
+                </header>
+
+                <!-- Main Content -->
+                <main class="max-w-7xl mx-auto px-6 py-8">
+                    ${state.activeTab === 'dashboard' ? renderDashboard() : ''}
+                    ${state.activeTab === 'suppliers' ? renderSuppliers() : ''}
+                    ${state.activeTab === 'contracts' ? renderContracts() : ''}
+                    ${state.activeTab === 'alternatives' ? renderAlternatives() : ''}
+                    ${state.activeTab === 'waivers' ? renderWaivers() : ''}
+                </main>
+
+                <!-- Footer -->
+                <footer class="border-t border-white/10 mt-16">
+                    <div class="max-w-7xl mx-auto px-6 py-6">
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="shield" class="w-5 h-5 text-cyan-400"></i>
+                                <span class="text-white/50 text-sm">TRAUT Applied Research © 2026</span>
+                            </div>
+                            <div class="text-xs text-white/30 text-center md:text-right">
+                                ARBITER Coherence Engine • Deterministic Semantic Analysis • 26MB • No LLM Hallucination<br>
+                                Section 851, NDAA FY2025 • Not Legal Advice • Consult Counsel for Compliance Decisions
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            `;
+
+            // Initialize Lucide icons
+            lucide.createIcons();
+        }
+
+        // Initial render
+        render();
+    </script>
+</body>
+</html>
