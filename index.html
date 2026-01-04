@@ -9,7 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Inter', sans-serif; }
+        * { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        html { -webkit-text-size-adjust: 100%; }
         .gradient-bg { background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #020617 100%); }
         .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); }
         .glow-cyan { box-shadow: 0 0 40px rgba(34,211,238,0.15); }
@@ -29,6 +30,42 @@
         .scrollbar-thin::-webkit-scrollbar { width: 6px; }
         .scrollbar-thin::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
         .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .mobile-hide { display: none !important; }
+            .mobile-stack { flex-direction: column !important; }
+            .mobile-full { width: 100% !important; }
+            .mobile-text-sm { font-size: 0.875rem !important; }
+            .mobile-text-xs { font-size: 0.75rem !important; }
+            .mobile-p-3 { padding: 0.75rem !important; }
+            .mobile-p-4 { padding: 1rem !important; }
+            .mobile-gap-2 { gap: 0.5rem !important; }
+            .mobile-grid-1 { grid-template-columns: 1fr !important; }
+        }
+        
+        /* Touch-friendly inputs */
+        input, select, textarea, button {
+            font-size: 16px !important; /* Prevents iOS zoom on focus */
+            min-height: 44px; /* Touch target size */
+        }
+        
+        /* Better mobile scrolling */
+        .mobile-scroll {
+            -webkit-overflow-scrolling: touch;
+            overflow-x: auto;
+        }
+        
+        /* Tab scrolling on mobile */
+        .tabs-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .tabs-container::-webkit-scrollbar {
+            display: none;
+        }
     </style>
 </head>
 <body class="gradient-bg min-h-screen text-white overflow-x-hidden">
@@ -350,58 +387,58 @@
             const contractStats = getContractStats();
 
             return `
-                <div class="space-y-6">
+                <div class="space-y-4 sm:space-y-6">
                     <!-- Risk Metrics -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="p-5 rounded-2xl bg-gradient-to-br from-red-500/20 to-red-600/10 border border-red-500/30">
-                            <div class="flex items-center justify-between mb-2">
-                                <i data-lucide="x-circle" class="w-6 h-6 text-red-400"></i>
-                                <span class="text-xs text-red-300 uppercase tracking-wider">Critical</span>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
+                        <div class="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-red-500/20 to-red-600/10 border border-red-500/30">
+                            <div class="flex items-center justify-between mb-1 sm:mb-2">
+                                <i data-lucide="x-circle" class="w-5 h-5 sm:w-6 sm:h-6 text-red-400"></i>
+                                <span class="text-[10px] sm:text-xs text-red-300 uppercase tracking-wider">Critical</span>
                             </div>
-                            <div class="text-4xl font-bold text-red-400">${stats.critical}</div>
-                            <div class="text-sm text-red-300/60 mt-1">Immediate action</div>
+                            <div class="text-2xl sm:text-4xl font-bold text-red-400">${stats.critical}</div>
+                            <div class="text-xs sm:text-sm text-red-300/60 mt-1 hidden sm:block">Immediate action</div>
                         </div>
-                        <div class="p-5 rounded-2xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/30">
-                            <div class="flex items-center justify-between mb-2">
-                                <i data-lucide="alert-triangle" class="w-6 h-6 text-orange-400"></i>
-                                <span class="text-xs text-orange-300 uppercase tracking-wider">High</span>
+                        <div class="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/30">
+                            <div class="flex items-center justify-between mb-1 sm:mb-2">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 sm:w-6 sm:h-6 text-orange-400"></i>
+                                <span class="text-[10px] sm:text-xs text-orange-300 uppercase tracking-wider">High</span>
                             </div>
-                            <div class="text-4xl font-bold text-orange-400">${stats.high}</div>
-                            <div class="text-sm text-orange-300/60 mt-1">Review before OMB</div>
+                            <div class="text-2xl sm:text-4xl font-bold text-orange-400">${stats.high}</div>
+                            <div class="text-xs sm:text-sm text-orange-300/60 mt-1 hidden sm:block">Review before OMB</div>
                         </div>
-                        <div class="p-5 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 border border-yellow-500/30">
-                            <div class="flex items-center justify-between mb-2">
-                                <i data-lucide="alert-circle" class="w-6 h-6 text-yellow-400"></i>
-                                <span class="text-xs text-yellow-300 uppercase tracking-wider">Medium</span>
+                        <div class="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 border border-yellow-500/30">
+                            <div class="flex items-center justify-between mb-1 sm:mb-2">
+                                <i data-lucide="alert-circle" class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400"></i>
+                                <span class="text-[10px] sm:text-xs text-yellow-300 uppercase tracking-wider">Medium</span>
                             </div>
-                            <div class="text-4xl font-bold text-yellow-400">${stats.medium}</div>
-                            <div class="text-sm text-yellow-300/60 mt-1">Monitor closely</div>
+                            <div class="text-2xl sm:text-4xl font-bold text-yellow-400">${stats.medium}</div>
+                            <div class="text-xs sm:text-sm text-yellow-300/60 mt-1 hidden sm:block">Monitor closely</div>
                         </div>
-                        <div class="p-5 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30">
-                            <div class="flex items-center justify-between mb-2">
-                                <i data-lucide="check-circle" class="w-6 h-6 text-emerald-400"></i>
-                                <span class="text-xs text-emerald-300 uppercase tracking-wider">Low</span>
+                        <div class="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30">
+                            <div class="flex items-center justify-between mb-1 sm:mb-2">
+                                <i data-lucide="check-circle" class="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400"></i>
+                                <span class="text-[10px] sm:text-xs text-emerald-300 uppercase tracking-wider">Low</span>
                             </div>
-                            <div class="text-4xl font-bold text-emerald-400">${stats.low}</div>
-                            <div class="text-sm text-emerald-300/60 mt-1">Compliant</div>
+                            <div class="text-2xl sm:text-4xl font-bold text-emerald-400">${stats.low}</div>
+                            <div class="text-xs sm:text-sm text-emerald-300/60 mt-1 hidden sm:block">Compliant</div>
                         </div>
                     </div>
 
                     <!-- Timeline & Contracts -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         <!-- Timeline -->
-                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
-                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                                <i data-lucide="clock" class="w-5 h-5 text-cyan-400"></i>
+                        <div class="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
+                            <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                                <i data-lucide="clock" class="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400"></i>
                                 BIOSECURE Act Timeline
                             </h3>
-                            <div class="space-y-4">
+                            <div class="space-y-3 sm:space-y-4">
                                 ${TIMELINE_EVENTS.map(item => `
-                                    <div class="flex items-start gap-3">
-                                        <div class="w-3 h-3 rounded-full mt-1.5 ring-4 ${item.status === 'complete' ? 'bg-emerald-500 ring-emerald-500/20' : 'bg-cyan-500 ring-cyan-500/20'}"></div>
-                                        <div>
-                                            <div class="font-medium ${item.status === 'complete' ? 'text-emerald-400' : 'text-cyan-400'}">${item.date}</div>
-                                            <div class="text-sm text-white/60">${item.description}</div>
+                                    <div class="flex items-start gap-2 sm:gap-3">
+                                        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full mt-1.5 ring-2 sm:ring-4 flex-shrink-0 ${item.status === 'complete' ? 'bg-emerald-500 ring-emerald-500/20' : 'bg-cyan-500 ring-cyan-500/20'}"></div>
+                                        <div class="min-w-0">
+                                            <div class="text-sm sm:text-base font-medium ${item.status === 'complete' ? 'text-emerald-400' : 'text-cyan-400'}">${item.date}</div>
+                                            <div class="text-xs sm:text-sm text-white/60">${item.description}</div>
                                         </div>
                                     </div>
                                 `).join('')}
@@ -409,9 +446,9 @@
                         </div>
 
                         <!-- Contract Status -->
-                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
-                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                                <i data-lucide="file-check" class="w-5 h-5 text-cyan-400"></i>
+                        <div class="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
+                            <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                                <i data-lucide="file-check" class="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400"></i>
                                 Contract Grandfathering
                             </h3>
                             ${state.contracts.length === 0 ? `
@@ -451,33 +488,33 @@
                     </div>
 
                     <!-- Supply Chain Tiers -->
-                    <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
-                        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                            <i data-lucide="layers" class="w-5 h-5 text-cyan-400"></i>
+                    <div class="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
+                        <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                            <i data-lucide="layers" class="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400"></i>
                             Supply Chain Visibility
                         </h3>
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-center p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30">
-                                <div class="text-3xl font-bold text-cyan-400">${stats.tier1}</div>
-                                <div class="text-sm text-cyan-300/70 mt-1">Tier 1 (Direct)</div>
+                        <div class="grid grid-cols-3 gap-2 sm:gap-4">
+                            <div class="text-center p-2 sm:p-4 rounded-lg sm:rounded-xl bg-cyan-500/10 border border-cyan-500/30">
+                                <div class="text-xl sm:text-3xl font-bold text-cyan-400">${stats.tier1}</div>
+                                <div class="text-[10px] sm:text-sm text-cyan-300/70 mt-1">Tier 1</div>
                             </div>
-                            <div class="text-center p-4 rounded-xl bg-violet-500/10 border border-violet-500/30">
-                                <div class="text-3xl font-bold text-violet-400">${stats.tier2}</div>
-                                <div class="text-sm text-violet-300/70 mt-1">Tier 2 (Indirect)</div>
+                            <div class="text-center p-2 sm:p-4 rounded-lg sm:rounded-xl bg-violet-500/10 border border-violet-500/30">
+                                <div class="text-xl sm:text-3xl font-bold text-violet-400">${stats.tier2}</div>
+                                <div class="text-[10px] sm:text-sm text-violet-300/70 mt-1">Tier 2</div>
                             </div>
-                            <div class="text-center p-4 rounded-xl bg-pink-500/10 border border-pink-500/30">
-                                <div class="text-3xl font-bold text-pink-400">${stats.tier3}</div>
-                                <div class="text-sm text-pink-300/70 mt-1">Tier 3 (Deep)</div>
+                            <div class="text-center p-2 sm:p-4 rounded-lg sm:rounded-xl bg-pink-500/10 border border-pink-500/30">
+                                <div class="text-xl sm:text-3xl font-bold text-pink-400">${stats.tier3}</div>
+                                <div class="text-[10px] sm:text-sm text-pink-300/70 mt-1">Tier 3</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Critical Findings -->
                     ${(stats.critical > 0 || stats.high > 0) ? `
-                        <div class="p-6 rounded-2xl bg-red-500/10 border border-red-500/30">
-                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2 text-red-300">
-                                <i data-lucide="alert-triangle" class="w-5 h-5"></i>
-                                Critical Findings Requiring Action
+                        <div class="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-red-500/10 border border-red-500/30">
+                            <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-red-300">
+                                <i data-lucide="alert-triangle" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                                Critical Findings
                             </h3>
                             <div class="space-y-3">
                                 ${state.suppliers.filter(s => s.risk.level === 'CRITICAL' || s.risk.level === 'HIGH').map(supplier => `
@@ -530,36 +567,39 @@
             const filtered = getFilteredSuppliers();
 
             return `
-                <div class="space-y-6">
+                <div class="space-y-4 sm:space-y-6">
                     <!-- Controls -->
-                    <div class="flex flex-col md:flex-row gap-4">
+                    <div class="flex flex-col gap-3 sm:gap-4">
                         <div class="flex-1 relative">
-                            <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30"></i>
-                            <input type="text" placeholder="Search suppliers..." value="${state.searchTerm}" oninput="state.searchTerm=this.value;render();" class="w-full pl-12 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none transition-all">
+                            <i data-lucide="search" class="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-white/30"></i>
+                            <input type="text" placeholder="Search suppliers..." value="${state.searchTerm}" oninput="state.searchTerm=this.value;render();" class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none transition-all text-sm sm:text-base">
                         </div>
-                        <select onchange="state.filterRisk=this.value;render();" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
-                            <option value="ALL" ${state.filterRisk === 'ALL' ? 'selected' : ''}>All Risk Levels</option>
-                            <option value="CRITICAL" ${state.filterRisk === 'CRITICAL' ? 'selected' : ''}>Critical Only</option>
-                            <option value="HIGH" ${state.filterRisk === 'HIGH' ? 'selected' : ''}>High Only</option>
-                            <option value="MEDIUM" ${state.filterRisk === 'MEDIUM' ? 'selected' : ''}>Medium Only</option>
-                            <option value="LOW" ${state.filterRisk === 'LOW' ? 'selected' : ''}>Low Only</option>
-                        </select>
-                        <button onclick="state.showAddSupplier=true;render();" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold transition-all">
-                            <i data-lucide="plus" class="w-5 h-5"></i>
-                            Add Supplier
-                        </button>
+                        <div class="flex gap-2 sm:gap-4">
+                            <select onchange="state.filterRisk=this.value;render();" class="flex-1 sm:flex-none px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none text-sm sm:text-base">
+                                <option value="ALL" ${state.filterRisk === 'ALL' ? 'selected' : ''}>All Risks</option>
+                                <option value="CRITICAL" ${state.filterRisk === 'CRITICAL' ? 'selected' : ''}>Critical</option>
+                                <option value="HIGH" ${state.filterRisk === 'HIGH' ? 'selected' : ''}>High</option>
+                                <option value="MEDIUM" ${state.filterRisk === 'MEDIUM' ? 'selected' : ''}>Medium</option>
+                                <option value="LOW" ${state.filterRisk === 'LOW' ? 'selected' : ''}>Low</option>
+                            </select>
+                            <button onclick="state.showAddSupplier=true;render();" class="flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold transition-all text-sm sm:text-base">
+                                <i data-lucide="plus" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                                <span class="hidden sm:inline">Add Supplier</span>
+                                <span class="sm:hidden">Add</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Add Supplier Form -->
                     ${state.showAddSupplier ? `
-                        <div class="p-6 rounded-2xl bg-white/5 border border-cyan-500/30">
-                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                                <i data-lucide="building-2" class="w-5 h-5 text-cyan-400"></i>
+                        <div class="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-cyan-500/30">
+                            <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                                <i data-lucide="building-2" class="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400"></i>
                                 Add New Supplier
                             </h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                <input type="text" placeholder="Supplier Name *" value="${state.newSupplier.name}" oninput="state.newSupplier.name=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
-                                <select onchange="state.newSupplier.country=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-4">
+                                <input type="text" placeholder="Supplier Name *" value="${state.newSupplier.name}" oninput="state.newSupplier.name=this.value" class="px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none text-sm sm:text-base">
+                                <select onchange="state.newSupplier.country=this.value" class="px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none text-sm sm:text-base">
                                     <option value="">Select Country *</option>
                                     <option value="China">🇨🇳 China</option>
                                     <option value="Russia">🇷🇺 Russia</option>
@@ -1014,57 +1054,57 @@
             app.innerHTML = `
                 <!-- Header -->
                 <header class="border-b border-white/10 backdrop-blur-xl sticky top-0 z-50">
-                    <div class="max-w-7xl mx-auto px-6 py-5">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="relative">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-5">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                            <div class="flex items-center gap-3 sm:gap-4">
+                                <div class="relative flex-shrink-0">
                                     <div class="absolute inset-0 bg-cyan-500 blur-xl opacity-50"></div>
-                                    <i data-lucide="shield" class="w-10 h-10 text-cyan-400 relative"></i>
+                                    <i data-lucide="shield" class="w-8 h-8 sm:w-10 sm:h-10 text-cyan-400 relative"></i>
                                 </div>
-                                <div>
-                                    <h1 class="text-2xl font-bold tracking-tight">
+                                <div class="min-w-0">
+                                    <h1 class="text-lg sm:text-2xl font-bold tracking-tight truncate">
                                         <span class="text-cyan-400">BIOSECURE</span>
-                                        <span class="text-white/80 ml-2">Compliance Intelligence</span>
+                                        <span class="text-white/80 ml-1 sm:ml-2 hidden xs:inline">Compliance</span>
                                     </h1>
-                                    <p class="text-sm text-white/50">Powered by ARBITER • TRAUT Applied Research</p>
+                                    <p class="text-xs sm:text-sm text-white/50 truncate">Powered by ARBITER • TRAUT</p>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-4">
-                                <input type="text" placeholder="Company Name" value="${state.companyName}" oninput="state.companyName=this.value" class="px-4 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none text-sm w-48">
-                                <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                            <div class="flex items-center gap-2 sm:gap-4">
+                                <input type="text" placeholder="Company Name" value="${state.companyName}" oninput="state.companyName=this.value" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none text-sm w-full sm:w-48">
+                                <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Tabs -->
-                    <div class="max-w-7xl mx-auto px-6">
-                        <nav class="flex gap-1">
-                            <button onclick="setTab('dashboard')" class="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all ${state.activeTab === 'dashboard' ? 'tab-active' : 'tab-inactive'}">
+                    <!-- Tabs - Horizontally Scrollable on Mobile -->
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+                        <nav class="tabs-container flex gap-1 pb-px">
+                            <button onclick="setTab('dashboard')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'dashboard' ? 'tab-active' : 'tab-inactive'}">
                                 <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
-                                Dashboard
+                                <span>Dashboard</span>
                             </button>
-                            <button onclick="setTab('suppliers')" class="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all ${state.activeTab === 'suppliers' ? 'tab-active' : 'tab-inactive'}">
+                            <button onclick="setTab('suppliers')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'suppliers' ? 'tab-active' : 'tab-inactive'}">
                                 <i data-lucide="building-2" class="w-4 h-4"></i>
-                                Suppliers
+                                <span>Suppliers</span>
                             </button>
-                            <button onclick="setTab('contracts')" class="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all ${state.activeTab === 'contracts' ? 'tab-active' : 'tab-inactive'}">
+                            <button onclick="setTab('contracts')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'contracts' ? 'tab-active' : 'tab-inactive'}">
                                 <i data-lucide="file-text" class="w-4 h-4"></i>
-                                Contracts
+                                <span>Contracts</span>
                             </button>
-                            <button onclick="setTab('alternatives')" class="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all ${state.activeTab === 'alternatives' ? 'tab-active' : 'tab-inactive'}">
+                            <button onclick="setTab('alternatives')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'alternatives' ? 'tab-active' : 'tab-inactive'}">
                                 <i data-lucide="lightbulb" class="w-4 h-4"></i>
-                                Alternatives
+                                <span>Alternatives</span>
                             </button>
-                            <button onclick="setTab('waivers')" class="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all ${state.activeTab === 'waivers' ? 'tab-active' : 'tab-inactive'}">
+                            <button onclick="setTab('waivers')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'waivers' ? 'tab-active' : 'tab-inactive'}">
                                 <i data-lucide="scale" class="w-4 h-4"></i>
-                                Waivers
+                                <span>Waivers</span>
                             </button>
                         </nav>
                     </div>
                 </header>
 
                 <!-- Main Content -->
-                <main class="max-w-7xl mx-auto px-6 py-8">
+                <main class="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
                     ${state.activeTab === 'dashboard' ? renderDashboard() : ''}
                     ${state.activeTab === 'suppliers' ? renderSuppliers() : ''}
                     ${state.activeTab === 'contracts' ? renderContracts() : ''}
