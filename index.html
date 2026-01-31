@@ -3,33 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIOSECURE Compliance Intelligence | TRAUT Applied Research</title>
+    <title>BIOSECURE Compliance Intelligence | Actual General Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        html { -webkit-text-size-adjust: 100%; }
-        .gradient-bg { background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #020617 100%); }
-        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); }
-        .glow-cyan { box-shadow: 0 0 40px rgba(34,211,238,0.15); }
-        .glow-red { box-shadow: 0 0 30px rgba(239,68,68,0.2); }
-        .animate-float { animation: float 6s ease-in-out infinite; }
-        .animate-float-delayed { animation: float 6s ease-in-out infinite; animation-delay: 2s; }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        * { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-tap-highlight-color: transparent;
         }
-        .tab-active { border-bottom: 2px solid #22d3ee; color: #22d3ee; }
-        .tab-inactive { border-bottom: 2px solid transparent; color: rgba(255,255,255,0.5); }
-        .risk-critical { background: linear-gradient(135deg, rgba(239,68,68,0.2), rgba(153,27,27,0.1)); border-color: rgba(239,68,68,0.5); }
-        .risk-high { background: linear-gradient(135deg, rgba(249,115,22,0.2), rgba(194,65,12,0.1)); border-color: rgba(249,115,22,0.5); }
-        .risk-medium { background: linear-gradient(135deg, rgba(234,179,8,0.2), rgba(161,98,7,0.1)); border-color: rgba(234,179,8,0.5); }
-        .risk-low { background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(4,120,87,0.1)); border-color: rgba(16,185,129,0.5); }
+        html { -webkit-text-size-adjust: 100%; }
+        body { background: #000; color: #fff; }
+        
+        /* Dov Charney Brutal Minimalism */
+        .gradient-bg { background: #000; }
+        .glass { background: #0a0a0a; border: 1px solid #1a1a1a; }
+        
+        /* No animations - static */
+        .animate-float, .animate-float-delayed { animation: none; }
+        
+        /* Tabs - Minimal */
+        .tab-active { border-bottom: 2px solid #fff; color: #fff; }
+        .tab-inactive { border-bottom: 2px solid transparent; color: #666; }
+        
+        /* Risk Colors - Brutal */
+        .risk-critical { background: #1a0000; border: 1px solid #ff0000; }
+        .risk-high { background: #1a0a00; border: 1px solid #ff6600; }
+        .risk-medium { background: #1a1a00; border: 1px solid #ffcc00; }
+        .risk-low { background: #001a00; border: 1px solid #00ff00; }
+        
         .scrollbar-thin::-webkit-scrollbar { width: 6px; }
-        .scrollbar-thin::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-        .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: #0a0a0a; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: #333; border-radius: 0; }
         
         /* Mobile Optimizations */
         @media (max-width: 768px) {
@@ -44,19 +52,16 @@
             .mobile-grid-1 { grid-template-columns: 1fr !important; }
         }
         
-        /* Touch-friendly inputs */
         input, select, textarea, button {
-            font-size: 16px !important; /* Prevents iOS zoom on focus */
-            min-height: 44px; /* Touch target size */
+            font-size: 16px !important;
+            min-height: 44px;
         }
         
-        /* Better mobile scrolling */
         .mobile-scroll {
             -webkit-overflow-scrolling: touch;
             overflow-x: auto;
         }
         
-        /* Tab scrolling on mobile */
         .tabs-container {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -69,19 +74,12 @@
     </style>
 </head>
 <body class="gradient-bg min-h-screen text-white overflow-x-hidden">
-    <!-- Animated Background -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-float"></div>
-        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-float-delayed"></div>
-        <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl animate-float" style="animation-delay: 1s;"></div>
-    </div>
-
     <div id="app" class="relative z-10"></div>
 
     <script>
         // ============================================
         // BIOSECURE COMPLIANCE INTELLIGENCE PLATFORM
-        // TRAUT Applied Research - Powered by ARBITER
+        // Actual General Intelligence, Inc.
         // ============================================
 
         // Known BCCs Database
@@ -353,10 +351,10 @@
 
         function getRiskColorClass(level) {
             switch (level) {
-                case 'CRITICAL': return 'risk-critical border';
-                case 'HIGH': return 'risk-high border';
-                case 'MEDIUM': return 'risk-medium border';
-                default: return 'risk-low border';
+                case 'CRITICAL': return 'risk-critical';
+                case 'HIGH': return 'risk-high';
+                case 'MEDIUM': return 'risk-medium';
+                default: return 'risk-low';
             }
         }
 
@@ -390,36 +388,36 @@
                 <div class="space-y-4 sm:space-y-6">
                     <!-- Risk Metrics -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
-                        <div class="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-red-500/20 to-red-600/10 border border-red-500/30">
+                        <div class="p-3 sm:p-5 rounded ${getRiskColorClass('CRITICAL')}">
                             <div class="flex items-center justify-between mb-1 sm:mb-2">
                                 <i data-lucide="x-circle" class="w-5 h-5 sm:w-6 sm:h-6 text-red-400"></i>
                                 <span class="text-[10px] sm:text-xs text-red-300 uppercase tracking-wider">Critical</span>
                             </div>
-                            <div class="text-2xl sm:text-4xl font-bold text-red-400">${stats.critical}</div>
+                            <div class="text-2xl sm:text-4xl font-light text-red-400">${stats.critical}</div>
                             <div class="text-xs sm:text-sm text-red-300/60 mt-1 hidden sm:block">Immediate action</div>
                         </div>
-                        <div class="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/30">
+                        <div class="p-3 sm:p-5 rounded ${getRiskColorClass('HIGH')}">
                             <div class="flex items-center justify-between mb-1 sm:mb-2">
                                 <i data-lucide="alert-triangle" class="w-5 h-5 sm:w-6 sm:h-6 text-orange-400"></i>
                                 <span class="text-[10px] sm:text-xs text-orange-300 uppercase tracking-wider">High</span>
                             </div>
-                            <div class="text-2xl sm:text-4xl font-bold text-orange-400">${stats.high}</div>
+                            <div class="text-2xl sm:text-4xl font-light text-orange-400">${stats.high}</div>
                             <div class="text-xs sm:text-sm text-orange-300/60 mt-1 hidden sm:block">Review before OMB</div>
                         </div>
-                        <div class="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 border border-yellow-500/30">
+                        <div class="p-3 sm:p-5 rounded ${getRiskColorClass('MEDIUM')}">
                             <div class="flex items-center justify-between mb-1 sm:mb-2">
                                 <i data-lucide="alert-circle" class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400"></i>
                                 <span class="text-[10px] sm:text-xs text-yellow-300 uppercase tracking-wider">Medium</span>
                             </div>
-                            <div class="text-2xl sm:text-4xl font-bold text-yellow-400">${stats.medium}</div>
+                            <div class="text-2xl sm:text-4xl font-light text-yellow-400">${stats.medium}</div>
                             <div class="text-xs sm:text-sm text-yellow-300/60 mt-1 hidden sm:block">Monitor closely</div>
                         </div>
-                        <div class="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30">
+                        <div class="p-3 sm:p-5 rounded ${getRiskColorClass('LOW')}">
                             <div class="flex items-center justify-between mb-1 sm:mb-2">
                                 <i data-lucide="check-circle" class="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400"></i>
                                 <span class="text-[10px] sm:text-xs text-emerald-300 uppercase tracking-wider">Low</span>
                             </div>
-                            <div class="text-2xl sm:text-4xl font-bold text-emerald-400">${stats.low}</div>
+                            <div class="text-2xl sm:text-4xl font-light text-emerald-400">${stats.low}</div>
                             <div class="text-xs sm:text-sm text-emerald-300/60 mt-1 hidden sm:block">Compliant</div>
                         </div>
                     </div>
@@ -427,18 +425,18 @@
                     <!-- Timeline & Contracts -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         <!-- Timeline -->
-                        <div class="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
-                            <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
-                                <i data-lucide="clock" class="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400"></i>
+                        <div class="p-4 sm:p-6 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
+                            <h3 class="text-base sm:text-lg font-medium mb-3 sm:mb-4 flex items-center gap-2" style="text-transform: uppercase; letter-spacing: 1px;">
+                                <i data-lucide="clock" class="w-4 h-4 sm:w-5 sm:h-5" style="color: #fff;"></i>
                                 BIOSECURE Act Timeline
                             </h3>
                             <div class="space-y-3 sm:space-y-4">
                                 ${TIMELINE_EVENTS.map(item => `
                                     <div class="flex items-start gap-2 sm:gap-3">
-                                        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full mt-1.5 ring-2 sm:ring-4 flex-shrink-0 ${item.status === 'complete' ? 'bg-emerald-500 ring-emerald-500/20' : 'bg-cyan-500 ring-cyan-500/20'}"></div>
+                                        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full mt-1.5 flex-shrink-0 ${item.status === 'complete' ? 'bg-white' : 'bg-gray-600'}"></div>
                                         <div class="min-w-0">
-                                            <div class="text-sm sm:text-base font-medium ${item.status === 'complete' ? 'text-emerald-400' : 'text-cyan-400'}">${item.date}</div>
-                                            <div class="text-xs sm:text-sm text-white/60">${item.description}</div>
+                                            <div class="text-sm sm:text-base font-medium ${item.status === 'complete' ? 'text-white' : 'text-gray-600'}">${item.date}</div>
+                                            <div class="text-xs sm:text-sm" style="color: #666;">${item.description}</div>
                                         </div>
                                     </div>
                                 `).join('')}
@@ -446,41 +444,41 @@
                         </div>
 
                         <!-- Contract Status -->
-                        <div class="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
-                            <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
-                                <i data-lucide="file-check" class="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400"></i>
+                        <div class="p-4 sm:p-6 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
+                            <h3 class="text-base sm:text-lg font-medium mb-3 sm:mb-4 flex items-center gap-2" style="text-transform: uppercase; letter-spacing: 1px;">
+                                <i data-lucide="file-check" class="w-4 h-4 sm:w-5 sm:h-5" style="color: #fff;"></i>
                                 Contract Grandfathering
                             </h3>
                             ${state.contracts.length === 0 ? `
-                                <div class="text-center py-8 text-white/40">
-                                    <i data-lucide="file-text" class="w-12 h-12 mx-auto mb-3 opacity-30"></i>
+                                <div class="text-center py-8" style="color: #666;">
+                                    <i data-lucide="file-text" class="w-12 h-12 mx-auto mb-3"></i>
                                     <p>No contracts added yet</p>
-                                    <button onclick="state.activeTab='contracts';state.showAddContract=true;render();" class="mt-3 text-cyan-400 hover:text-cyan-300 text-sm">
+                                    <button onclick="state.activeTab='contracts';state.showAddContract=true;render();" class="mt-3 text-white hover:text-gray-300 text-sm">
                                         Add your first contract →
                                     </button>
                                 </div>
                             ` : `
                                 <div class="space-y-3">
-                                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                                    <div class="flex items-center justify-between p-3 rounded ${getRiskColorClass('LOW')}">
                                         <div class="flex items-center gap-2">
                                             <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
                                             <span>Grandfathered</span>
                                         </div>
-                                        <span class="text-2xl font-bold text-emerald-400">${contractStats.grandfathered}</span>
+                                        <span class="text-2xl font-light text-emerald-400">${contractStats.grandfathered}</span>
                                     </div>
-                                    <div class="flex items-center justify-between p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/30">
+                                    <div class="flex items-center justify-between p-3 rounded ${getRiskColorClass('MEDIUM')}">
                                         <div class="flex items-center gap-2">
                                             <i data-lucide="alert-circle" class="w-5 h-5 text-yellow-400"></i>
                                             <span>Pending Review</span>
                                         </div>
-                                        <span class="text-2xl font-bold text-yellow-400">${contractStats.pending}</span>
+                                        <span class="text-2xl font-light text-yellow-400">${contractStats.pending}</span>
                                     </div>
-                                    <div class="flex items-center justify-between p-3 rounded-xl bg-red-500/10 border border-red-500/30">
+                                    <div class="flex items-center justify-between p-3 rounded ${getRiskColorClass('CRITICAL')}">
                                         <div class="flex items-center gap-2">
                                             <i data-lucide="x-circle" class="w-5 h-5 text-red-400"></i>
                                             <span>Transition Required</span>
                                         </div>
-                                        <span class="text-2xl font-bold text-red-400">${contractStats.atRisk}</span>
+                                        <span class="text-2xl font-light text-red-400">${contractStats.atRisk}</span>
                                     </div>
                                 </div>
                             `}
@@ -488,53 +486,53 @@
                     </div>
 
                     <!-- Supply Chain Tiers -->
-                    <div class="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
-                        <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
-                            <i data-lucide="layers" class="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400"></i>
+                    <div class="p-4 sm:p-6 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
+                        <h3 class="text-base sm:text-lg font-medium mb-3 sm:mb-4 flex items-center gap-2" style="text-transform: uppercase; letter-spacing: 1px;">
+                            <i data-lucide="layers" class="w-4 h-4 sm:w-5 sm:h-5" style="color: #fff;"></i>
                             Supply Chain Visibility
                         </h3>
                         <div class="grid grid-cols-3 gap-2 sm:gap-4">
-                            <div class="text-center p-2 sm:p-4 rounded-lg sm:rounded-xl bg-cyan-500/10 border border-cyan-500/30">
-                                <div class="text-xl sm:text-3xl font-bold text-cyan-400">${stats.tier1}</div>
-                                <div class="text-[10px] sm:text-sm text-cyan-300/70 mt-1">Tier 1</div>
+                            <div class="text-center p-2 sm:p-4 rounded" style="background: #050505; border: 1px solid #1a1a1a;">
+                                <div class="text-xl sm:text-3xl font-light text-white">${stats.tier1}</div>
+                                <div class="text-[10px] sm:text-sm mt-1" style="color: #666;">Tier 1</div>
                             </div>
-                            <div class="text-center p-2 sm:p-4 rounded-lg sm:rounded-xl bg-violet-500/10 border border-violet-500/30">
-                                <div class="text-xl sm:text-3xl font-bold text-violet-400">${stats.tier2}</div>
-                                <div class="text-[10px] sm:text-sm text-violet-300/70 mt-1">Tier 2</div>
+                            <div class="text-center p-2 sm:p-4 rounded" style="background: #050505; border: 1px solid #1a1a1a;">
+                                <div class="text-xl sm:text-3xl font-light text-white">${stats.tier2}</div>
+                                <div class="text-[10px] sm:text-sm mt-1" style="color: #666;">Tier 2</div>
                             </div>
-                            <div class="text-center p-2 sm:p-4 rounded-lg sm:rounded-xl bg-pink-500/10 border border-pink-500/30">
-                                <div class="text-xl sm:text-3xl font-bold text-pink-400">${stats.tier3}</div>
-                                <div class="text-[10px] sm:text-sm text-pink-300/70 mt-1">Tier 3</div>
+                            <div class="text-center p-2 sm:p-4 rounded" style="background: #050505; border: 1px solid #1a1a1a;">
+                                <div class="text-xl sm:text-3xl font-light text-white">${stats.tier3}</div>
+                                <div class="text-[10px] sm:text-sm mt-1" style="color: #666;">Tier 3</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Critical Findings -->
                     ${(stats.critical > 0 || stats.high > 0) ? `
-                        <div class="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-red-500/10 border border-red-500/30">
-                            <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-red-300">
+                        <div class="p-4 sm:p-6 rounded ${getRiskColorClass('CRITICAL')}">
+                            <h3 class="text-base sm:text-lg font-medium mb-3 sm:mb-4 flex items-center gap-2 text-red-300" style="text-transform: uppercase; letter-spacing: 1px;">
                                 <i data-lucide="alert-triangle" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                                 Critical Findings
                             </h3>
                             <div class="space-y-3">
                                 ${state.suppliers.filter(s => s.risk.level === 'CRITICAL' || s.risk.level === 'HIGH').map(supplier => `
-                                    <div class="p-4 rounded-xl bg-black/20 border border-red-500/20">
+                                    <div class="p-4 rounded" style="background: #000; border: 1px solid #1a1a1a;">
                                         <div class="flex items-center justify-between mb-2">
                                             <div class="flex items-center gap-3">
-                                                <span class="font-semibold">${supplier.name}</span>
+                                                <span class="font-medium">${supplier.name}</span>
                                                 <span class="text-xs px-2 py-0.5 rounded-full ${getRiskBadgeClass(supplier.risk.level)}">${supplier.risk.level}</span>
                                             </div>
-                                            <span class="text-2xl font-bold text-red-400">${supplier.risk.score}%</span>
+                                            <span class="text-2xl font-light text-red-400">${supplier.risk.score}%</span>
                                         </div>
-                                        <div class="text-sm text-white/60 mb-2">${supplier.country} • ${supplier.category} • Tier ${supplier.tier}</div>
+                                        <div class="text-sm mb-2" style="color: #666;">${supplier.country} • ${supplier.category} • Tier ${supplier.tier}</div>
                                         ${supplier.risk.factors?.length ? `
                                             <ul class="text-sm text-red-300/80 space-y-1">
                                                 ${supplier.risk.factors.map(f => `<li>• ${f}</li>`).join('')}
                                             </ul>
                                         ` : ''}
                                         ${supplier.alternatives?.length ? `
-                                            <div class="mt-3 pt-3 border-t border-red-500/20">
-                                                <button onclick="state.expandedAlternatives = state.expandedAlternatives === ${supplier.id} ? null : ${supplier.id}; render();" class="text-sm text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+                                            <div class="mt-3 pt-3" style="border-top: 1px solid #1a1a1a;">
+                                                <button onclick="state.expandedAlternatives = state.expandedAlternatives === ${supplier.id} ? null : ${supplier.id}; render();" class="text-sm text-white hover:text-gray-300 flex items-center gap-1">
                                                     <i data-lucide="lightbulb" class="w-4 h-4"></i>
                                                     ${supplier.alternatives.length} compliant alternative${supplier.alternatives.length > 1 ? 's' : ''}
                                                     <i data-lucide="${state.expandedAlternatives === supplier.id ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4"></i>
@@ -542,12 +540,12 @@
                                                 ${state.expandedAlternatives === supplier.id ? `
                                                     <div class="mt-2 grid gap-2">
                                                         ${supplier.alternatives.map(alt => `
-                                                            <div class="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
+                                                            <div class="p-3 rounded ${getRiskColorClass('LOW')}">
                                                                 <div class="flex items-center justify-between">
                                                                     <span class="font-medium text-emerald-300">${alt.name}</span>
                                                                     <span class="text-xs text-emerald-400">${alt.country}</span>
                                                                 </div>
-                                                                <div class="text-xs text-white/50 mt-1">${alt.services.join(' • ')}</div>
+                                                                <div class="text-xs mt-1" style="color: #666;">${alt.services.join(' • ')}</div>
                                                             </div>
                                                         `).join('')}
                                                     </div>
@@ -571,18 +569,18 @@
                     <!-- Controls -->
                     <div class="flex flex-col gap-3 sm:gap-4">
                         <div class="flex-1 relative">
-                            <i data-lucide="search" class="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-white/30"></i>
-                            <input type="text" placeholder="Search suppliers..." value="${state.searchTerm}" oninput="state.searchTerm=this.value;render();" class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none transition-all text-sm sm:text-base">
+                            <i data-lucide="search" class="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5" style="color: #666;"></i>
+                            <input type="text" placeholder="Search suppliers..." value="${state.searchTerm}" oninput="state.searchTerm=this.value;render();" class="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 rounded text-sm sm:text-base" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;">
                         </div>
                         <div class="flex gap-2 sm:gap-4">
-                            <select onchange="state.filterRisk=this.value;render();" class="flex-1 sm:flex-none px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none text-sm sm:text-base">
+                            <select onchange="state.filterRisk=this.value;render();" class="flex-1 sm:flex-none px-3 sm:px-4 py-2.5 sm:py-3 rounded text-sm sm:text-base" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;">
                                 <option value="ALL" ${state.filterRisk === 'ALL' ? 'selected' : ''}>All Risks</option>
                                 <option value="CRITICAL" ${state.filterRisk === 'CRITICAL' ? 'selected' : ''}>Critical</option>
                                 <option value="HIGH" ${state.filterRisk === 'HIGH' ? 'selected' : ''}>High</option>
                                 <option value="MEDIUM" ${state.filterRisk === 'MEDIUM' ? 'selected' : ''}>Medium</option>
                                 <option value="LOW" ${state.filterRisk === 'LOW' ? 'selected' : ''}>Low</option>
                             </select>
-                            <button onclick="state.showAddSupplier=true;render();" class="flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold transition-all text-sm sm:text-base">
+                            <button onclick="state.showAddSupplier=true;render();" class="flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded font-medium text-sm sm:text-base" style="background: #fff; color: #000;">
                                 <i data-lucide="plus" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                                 <span class="hidden sm:inline">Add Supplier</span>
                                 <span class="sm:hidden">Add</span>
@@ -592,14 +590,14 @@
 
                     <!-- Add Supplier Form -->
                     ${state.showAddSupplier ? `
-                        <div class="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-cyan-500/30">
-                            <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
-                                <i data-lucide="building-2" class="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400"></i>
+                        <div class="p-4 sm:p-6 rounded" style="background: #0a0a0a; border: 1px solid #333;">
+                            <h3 class="text-base sm:text-lg font-medium mb-3 sm:mb-4 flex items-center gap-2" style="text-transform: uppercase; letter-spacing: 1px;">
+                                <i data-lucide="building-2" class="w-4 h-4 sm:w-5 sm:h-5" style="color: #fff;"></i>
                                 Add New Supplier
                             </h3>
                             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-4">
-                                <input type="text" placeholder="Supplier Name *" value="${state.newSupplier.name}" oninput="state.newSupplier.name=this.value" class="px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none text-sm sm:text-base">
-                                <select onchange="state.newSupplier.country=this.value" class="px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none text-sm sm:text-base">
+                                <input type="text" placeholder="Supplier Name *" value="${state.newSupplier.name}" oninput="state.newSupplier.name=this.value" class="px-3 sm:px-4 py-2.5 sm:py-3 rounded text-sm sm:text-base" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;">
+                                <select onchange="state.newSupplier.country=this.value" class="px-3 sm:px-4 py-2.5 sm:py-3 rounded text-sm sm:text-base" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;">
                                     <option value="">Select Country *</option>
                                     <option value="China">🇨🇳 China</option>
                                     <option value="Russia">🇷🇺 Russia</option>
@@ -615,7 +613,7 @@
                                     <option value="Ireland">🇮🇪 Ireland</option>
                                     <option value="Singapore">🇸🇬 Singapore</option>
                                 </select>
-                                <select onchange="state.newSupplier.category=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                <select onchange="state.newSupplier.category=this.value" class="px-4 py-3 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;">
                                     <option value="">Select Category *</option>
                                     <option value="Contract Research Organization (CRO)">CRO</option>
                                     <option value="Contract Development & Manufacturing (CDMO)">CDMO</option>
@@ -626,22 +624,22 @@
                                     <option value="Clinical Trial Services">Clinical Trials</option>
                                     <option value="API Manufacturing">API Manufacturing</option>
                                 </select>
-                                <select onchange="state.newSupplier.tier=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                <select onchange="state.newSupplier.tier=this.value" class="px-4 py-3 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;">
                                     <option value="1">Tier 1 - Direct Supplier</option>
                                     <option value="2">Tier 2 - Supplier's Supplier</option>
                                     <option value="3">Tier 3 - Extended Chain</option>
                                 </select>
-                                <input type="text" placeholder="Services Provided" oninput="state.newSupplier.services=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
-                                <label class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10">
+                                <input type="text" placeholder="Services Provided" oninput="state.newSupplier.services=this.value" class="px-4 py-3 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;">
+                                <label class="flex items-center gap-3 px-4 py-3 rounded cursor-pointer" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
                                     <input type="checkbox" onchange="state.newSupplier.dataAccess=this.checked" class="w-4 h-4 rounded">
-                                    <span class="text-white/70 text-sm">Access to Genomic Data</span>
+                                    <span style="color: #999;" class="text-sm">Access to Genomic Data</span>
                                 </label>
                             </div>
                             <div class="flex gap-3">
-                                <button onclick="addSupplier()" class="px-6 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold transition-all">
+                                <button onclick="addSupplier()" class="px-6 py-2 rounded font-medium" style="background: #fff; color: #000;">
                                     Analyze & Add
                                 </button>
-                                <button onclick="state.showAddSupplier=false;render();" class="px-6 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all">
+                                <button onclick="state.showAddSupplier=false;render();" class="px-6 py-2 rounded" style="background: transparent; border: 1px solid #333; color: #fff;">
                                     Cancel
                                 </button>
                             </div>
@@ -649,9 +647,9 @@
                     ` : ''}
 
                     <!-- Known BCCs Reference -->
-                    <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div class="p-4 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
                         <button onclick="state.showBCCReference=!state.showBCCReference;render();" class="w-full flex items-center justify-between text-left">
-                            <span class="font-medium text-white/70 flex items-center gap-2">
+                            <span class="font-medium flex items-center gap-2" style="color: #999;">
                                 <i data-lucide="database" class="w-5 h-5 text-red-400"></i>
                                 Known Biotechnology Companies of Concern (${KNOWN_BCC_ENTITIES.length})
                             </span>
@@ -660,12 +658,12 @@
                         ${state.showBCCReference ? `
                             <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
                                 ${KNOWN_BCC_ENTITIES.map(entity => `
-                                    <div class="p-4 rounded-xl ${getRiskColorClass(entity.risk)}">
+                                    <div class="p-4 rounded ${getRiskColorClass(entity.risk)}">
                                         <div class="flex items-center justify-between mb-2">
-                                            <span class="font-semibold">${entity.name}</span>
+                                            <span class="font-medium">${entity.name}</span>
                                             <span class="text-xs px-2 py-0.5 rounded-full ${getRiskBadgeClass(entity.risk)}">${entity.risk}</span>
                                         </div>
-                                        <div class="text-sm opacity-70 space-y-1">
+                                        <div class="text-sm space-y-1" style="color: #999;">
                                             <div>${entity.country} • ${entity.headquarters}</div>
                                             <div>${entity.category}</div>
                                             <div class="text-xs">${entity.status}</div>
@@ -679,48 +677,48 @@
                     <!-- Supplier List -->
                     <div class="space-y-3">
                         ${filtered.length === 0 ? `
-                            <div class="text-center py-16 text-white/40">
-                                <i data-lucide="building-2" class="w-16 h-16 mx-auto mb-4 opacity-30"></i>
+                            <div class="text-center py-16" style="color: #666;">
+                                <i data-lucide="building-2" class="w-16 h-16 mx-auto mb-4"></i>
                                 <p class="text-lg">No suppliers found</p>
                                 <p class="text-sm">Add suppliers to assess BIOSECURE compliance risk</p>
                             </div>
                         ` : filtered.map(supplier => `
-                            <div class="p-5 rounded-xl ${getRiskColorClass(supplier.risk.level)}">
+                            <div class="p-5 rounded ${getRiskColorClass(supplier.risk.level)}">
                                 <div class="flex items-start justify-between">
                                     <div class="flex-1">
                                         <div class="flex items-center gap-3 mb-2">
-                                            <span class="font-semibold text-lg">${supplier.name}</span>
+                                            <span class="font-medium text-lg">${supplier.name}</span>
                                             <span class="text-xs px-2 py-0.5 rounded-full ${getRiskBadgeClass(supplier.risk.level)}">${supplier.risk.level}</span>
-                                            <span class="text-xs px-2 py-0.5 rounded-full bg-white/10">Tier ${supplier.tier}</span>
+                                            <span class="text-xs px-2 py-0.5 rounded-full" style="background: #1a1a1a;">Tier ${supplier.tier}</span>
                                         </div>
-                                        <div class="text-sm opacity-70 flex flex-wrap gap-x-4">
+                                        <div class="text-sm flex flex-wrap gap-x-4" style="color: #999;">
                                             <span>${supplier.country}</span>
                                             <span>${supplier.category}</span>
                                             ${supplier.dataAccess ? '<span class="text-red-300">⚠️ Genomic Data Access</span>' : ''}
                                         </div>
                                         ${supplier.risk.factors?.length ? `
                                             <div class="mt-3 space-y-1">
-                                                ${supplier.risk.factors.map(f => `<div class="text-sm opacity-80">• ${f}</div>`).join('')}
+                                                ${supplier.risk.factors.map(f => `<div class="text-sm" style="color: #999;">• ${f}</div>`).join('')}
                                             </div>
                                         ` : ''}
                                         ${supplier.risk.match ? `
-                                            <div class="mt-3 p-3 rounded-lg bg-black/20 text-sm">
-                                                <span class="font-semibold text-red-300">⚠️ Matches Known BCC:</span>
+                                            <div class="mt-3 p-3 rounded text-sm" style="background: #000; border: 1px solid #1a1a1a;">
+                                                <span class="font-medium text-red-300">⚠️ Matches Known BCC:</span>
                                                 <span class="ml-2">${supplier.risk.match.name} (${supplier.risk.match.status})</span>
                                             </div>
                                         ` : ''}
                                     </div>
                                     <div class="text-right flex flex-col items-end gap-2">
-                                        <div class="text-3xl font-bold">${supplier.risk.score}%</div>
-                                        <div class="text-xs uppercase tracking-wider opacity-70">Risk Score</div>
-                                        <button onclick="removeSupplier(${supplier.id})" class="mt-2 p-2 rounded-lg hover:bg-black/20 transition-all opacity-50 hover:opacity-100">
+                                        <div class="text-3xl font-light">${supplier.risk.score}%</div>
+                                        <div class="text-xs uppercase tracking-wider" style="color: #999;">Risk Score</div>
+                                        <button onclick="removeSupplier(${supplier.id})" class="mt-2 p-2 rounded" style="color: #666;">
                                             <i data-lucide="trash-2" class="w-5 h-5"></i>
                                         </button>
                                     </div>
                                 </div>
                                 ${supplier.alternatives?.length ? `
-                                    <div class="mt-4 pt-4 border-t border-current/20">
-                                        <button onclick="state.expandedAlternatives = state.expandedAlternatives === ${supplier.id} ? null : ${supplier.id}; render();" class="text-sm flex items-center gap-2 hover:opacity-80">
+                                    <div class="mt-4 pt-4" style="border-top: 1px solid #1a1a1a;">
+                                        <button onclick="state.expandedAlternatives = state.expandedAlternatives === ${supplier.id} ? null : ${supplier.id}; render();" class="text-sm flex items-center gap-2" style="color: #fff;">
                                             <i data-lucide="lightbulb" class="w-4 h-4"></i>
                                             ${supplier.alternatives.length} Compliant Alternative${supplier.alternatives.length > 1 ? 's' : ''}
                                             <i data-lucide="${state.expandedAlternatives === supplier.id ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4"></i>
@@ -728,13 +726,13 @@
                                         ${state.expandedAlternatives === supplier.id ? `
                                             <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2">
                                                 ${supplier.alternatives.map(alt => `
-                                                    <div class="p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/40">
+                                                    <div class="p-3 rounded ${getRiskColorClass('LOW')}">
                                                         <div class="flex items-center justify-between mb-1">
                                                             <span class="font-medium text-emerald-300">${alt.name}</span>
-                                                            <span class="text-xs bg-emerald-500/30 px-2 py-0.5 rounded-full">${alt.country}</span>
+                                                            <span class="text-xs px-2 py-0.5 rounded-full" style="background: rgba(0,255,0,0.2);">${alt.country}</span>
                                                         </div>
-                                                        <div class="text-xs text-emerald-200/60">${alt.headquarters}</div>
-                                                        <div class="text-xs text-emerald-200/50 mt-1">${alt.services.slice(0, 3).join(' • ')}</div>
+                                                        <div class="text-xs" style="color: #999;">${alt.headquarters}</div>
+                                                        <div class="text-xs mt-1" style="color: #666;">${alt.services.slice(0, 3).join(' • ')}</div>
                                                     </div>
                                                 `).join('')}
                                             </div>
@@ -753,7 +751,7 @@
                 <div class="space-y-6">
                     <!-- Controls -->
                     <div class="flex gap-4">
-                        <button onclick="state.showAddContract=true;render();" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold transition-all">
+                        <button onclick="state.showAddContract=true;render();" class="flex items-center gap-2 px-6 py-3 rounded font-medium" style="background: #fff; color: #000;">
                             <i data-lucide="plus" class="w-5 h-5"></i>
                             Add Contract
                         </button>
@@ -761,40 +759,40 @@
 
                     <!-- Add Contract Form -->
                     ${state.showAddContract ? `
-                        <div class="p-6 rounded-2xl bg-white/5 border border-cyan-500/30">
-                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                                <i data-lucide="file-text" class="w-5 h-5 text-cyan-400"></i>
+                        <div class="p-6 rounded" style="background: #0a0a0a; border: 1px solid #333;">
+                            <h3 class="text-lg font-medium mb-4 flex items-center gap-2" style="text-transform: uppercase; letter-spacing: 1px;">
+                                <i data-lucide="file-text" class="w-5 h-5" style="color: #fff;"></i>
                                 Add Contract for Analysis
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                <select onchange="state.newContract.supplierId=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                <select onchange="state.newContract.supplierId=this.value" class="px-4 py-3 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;">
                                     <option value="">Select Supplier *</option>
                                     ${state.suppliers.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}
                                 </select>
-                                <input type="text" placeholder="Contract Number" oninput="state.newContract.contractNumber=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
-                                <input type="text" placeholder="Contract Value" oninput="state.newContract.value=this.value" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                <input type="text" placeholder="Contract Number" oninput="state.newContract.contractNumber=this.value" class="px-4 py-3 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;">
+                                <input type="text" placeholder="Contract Value" oninput="state.newContract.value=this.value" class="px-4 py-3 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;">
                                 <div>
-                                    <label class="text-xs text-white/50 block mb-1">Start Date *</label>
-                                    <input type="date" onchange="state.newContract.startDate=this.value" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                    <label class="text-xs block mb-1" style="color: #666;">Start Date *</label>
+                                    <input type="date" onchange="state.newContract.startDate=this.value" class="w-full px-4 py-3 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;">
                                 </div>
                                 <div>
-                                    <label class="text-xs text-white/50 block mb-1">End Date</label>
-                                    <input type="date" onchange="state.newContract.endDate=this.value" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none">
+                                    <label class="text-xs block mb-1" style="color: #666;">End Date</label>
+                                    <input type="date" onchange="state.newContract.endDate=this.value" class="w-full px-4 py-3 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;">
                                 </div>
-                                <label class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:bg-white/10">
+                                <label class="flex items-center gap-3 px-4 py-3 rounded cursor-pointer" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
                                     <input type="checkbox" onchange="state.newContract.hasAutoRenewal=this.checked" class="w-4 h-4 rounded">
-                                    <span class="text-white/70 text-sm">Auto-renewal clause</span>
+                                    <span style="color: #999;" class="text-sm">Auto-renewal clause</span>
                                 </label>
                             </div>
                             <div class="mb-4">
-                                <label class="text-sm text-white/70 block mb-2">Contract Clause Text (for ARBITER analysis)</label>
-                                <textarea placeholder="Paste relevant contract clauses..." oninput="state.newContract.clauseText=this.value" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none h-32 resize-none font-mono text-sm"></textarea>
+                                <label class="text-sm block mb-2" style="color: #999;">Contract Clause Text (for ARBITER analysis)</label>
+                                <textarea placeholder="Paste relevant contract clauses..." oninput="state.newContract.clauseText=this.value" class="w-full px-4 py-3 rounded h-32 resize-none font-mono text-sm" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;"></textarea>
                             </div>
                             <div class="flex gap-3">
-                                <button onclick="addContract()" class="px-6 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold transition-all">
+                                <button onclick="addContract()" class="px-6 py-2 rounded font-medium" style="background: #fff; color: #000;">
                                     Analyze Contract
                                 </button>
-                                <button onclick="state.showAddContract=false;render();" class="px-6 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all">
+                                <button onclick="state.showAddContract=false;render();" class="px-6 py-2 rounded" style="background: transparent; border: 1px solid #333; color: #fff;">
                                     Cancel
                                 </button>
                             </div>
@@ -802,12 +800,12 @@
                     ` : ''}
 
                     <!-- Grandfathering Info -->
-                    <div class="p-5 rounded-xl bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/30">
+                    <div class="p-5 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
                         <div class="flex items-start gap-3">
-                            <i data-lucide="info" class="w-6 h-6 text-violet-400 flex-shrink-0 mt-0.5"></i>
+                            <i data-lucide="info" class="w-6 h-6 flex-shrink-0 mt-0.5" style="color: #fff;"></i>
                             <div>
-                                <h4 class="font-semibold text-violet-300 mb-1">Grandfathering Rules (5-Year Safe Harbor)</h4>
-                                <p class="text-sm text-white/60">
+                                <h4 class="font-medium mb-1">Grandfathering Rules (5-Year Safe Harbor)</h4>
+                                <p class="text-sm" style="color: #999;">
                                     Contracts entered into <strong>before</strong> the FAR revision (~mid 2027) are grandfathered for 5 years. 
                                     Contracts with companies on the 1260H list as of Dec 18, 2024 do NOT receive safe harbor protection.
                                 </p>
@@ -818,57 +816,62 @@
                     <!-- Contract List -->
                     <div class="space-y-4">
                         ${state.contracts.length === 0 ? `
-                            <div class="text-center py-16 text-white/40">
-                                <i data-lucide="file-text" class="w-16 h-16 mx-auto mb-4 opacity-30"></i>
+                            <div class="text-center py-16" style="color: #666;">
+                                <i data-lucide="file-text" class="w-16 h-16 mx-auto mb-4"></i>
                                 <p class="text-lg">No contracts added yet</p>
                                 <p class="text-sm">Add contracts to analyze grandfathering eligibility</p>
                             </div>
                         ` : state.contracts.map(contract => {
                             const supplier = state.suppliers.find(s => s.id.toString() === contract.supplierId);
                             return `
-                                <div class="p-5 rounded-xl bg-white/5 border border-white/10">
+                                <div class="p-5 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
                                     <div class="flex items-start justify-between mb-4">
                                         <div>
                                             <div class="flex items-center gap-3 mb-1">
-                                                <i data-lucide="file-text" class="w-5 h-5 text-cyan-400"></i>
-                                                <span class="font-semibold">${contract.contractNumber || 'Contract'}</span>
-                                                ${supplier ? `<span class="text-sm text-white/50">with ${supplier.name}</span>` : ''}
+                                                <i data-lucide="file-text" class="w-5 h-5" style="color: #fff;"></i>
+                                                <span class="font-medium">${contract.contractNumber || 'Contract'}</span>
+                                                ${supplier ? `<span class="text-sm" style="color: #666;">with ${supplier.name}</span>` : ''}
                                             </div>
-                                            <div class="text-sm text-white/50">
+                                            <div class="text-sm" style="color: #666;">
                                                 ${contract.startDate} → ${contract.endDate || 'No end date'}
                                                 ${contract.value ? ` • ${contract.value}` : ''}
                                                 ${contract.hasAutoRenewal ? ' • ⚠️ Auto-renewal' : ''}
                                             </div>
                                         </div>
-                                        <div class="px-3 py-1 rounded-lg text-sm font-medium ${
-                                            contract.grandfathering?.eligible === 'YES' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
-                                            contract.grandfathering?.eligible === 'NO' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
-                                            'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
-                                        }">
+                                        <div class="px-3 py-1 rounded text-sm font-medium" style="border: 1px solid ${
+                                            contract.grandfathering?.eligible === 'YES' ? '#00ff00' :
+                                            contract.grandfathering?.eligible === 'NO' ? '#ff0000' : '#ffcc00'
+                                        }; background: ${
+                                            contract.grandfathering?.eligible === 'YES' ? 'rgba(0,255,0,0.1)' :
+                                            contract.grandfathering?.eligible === 'NO' ? 'rgba(255,0,0,0.1)' : 'rgba(255,204,0,0.1)'
+                                        }; color: ${
+                                            contract.grandfathering?.eligible === 'YES' ? '#66ff66' :
+                                            contract.grandfathering?.eligible === 'NO' ? '#ff6666' : '#ffdd66'
+                                        };">
                                             ${contract.grandfathering?.eligible === 'YES' ? '✓ Grandfathered' :
                                               contract.grandfathering?.eligible === 'NO' ? '✗ Not Eligible' : '? Pending'}
                                         </div>
                                     </div>
-                                    <div class="p-3 rounded-lg bg-black/20 mb-4">
+                                    <div class="p-3 rounded mb-4" style="background: #000;">
                                         <div class="text-sm">
-                                            <span class="text-white/50">Status: </span>
+                                            <span style="color: #666;">Status: </span>
                                             <span>${contract.grandfathering?.reason || 'Unknown'}</span>
                                         </div>
                                         ${contract.grandfathering?.safeHarborEnd ? `
                                             <div class="text-sm mt-1">
-                                                <span class="text-white/50">Safe Harbor Ends: </span>
+                                                <span style="color: #666;">Safe Harbor Ends: </span>
                                                 <span class="text-emerald-400">${contract.grandfathering.safeHarborEnd}</span>
                                             </div>
                                         ` : ''}
                                     </div>
                                     ${contract.clauseFindings?.length ? `
                                         <div class="space-y-2">
-                                            <h5 class="text-sm font-medium text-white/70 flex items-center gap-2">
-                                                <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i>
+                                            <h5 class="text-sm font-medium flex items-center gap-2" style="color: #999; text-transform: uppercase; letter-spacing: 1px;">
+                                                <i data-lucide="activity" class="w-4 h-4" style="color: #fff;"></i>
                                                 ARBITER Clause Analysis
                                             </h5>
                                             ${contract.clauseFindings.map(finding => `
-                                                <div class="p-3 rounded-lg border ${finding.severity === 'HIGH' ? 'bg-red-500/10 border-red-500/30' : 'bg-yellow-500/10 border-yellow-500/30'}">
+                                                <div class="p-3 rounded" style="border: 1px solid ${finding.severity === 'HIGH' ? '#ff0000' : '#ffcc00'}; background: ${finding.severity === 'HIGH' ? 'rgba(255,0,0,0.1)' : 'rgba(255,204,0,0.1)'};">
                                                     <div class="flex items-center gap-2 text-sm">
                                                         <i data-lucide="${finding.severity === 'HIGH' ? 'alert-triangle' : 'alert-circle'}" class="w-4 h-4 ${finding.severity === 'HIGH' ? 'text-red-400' : 'text-yellow-400'}"></i>
                                                         <span class="${finding.severity === 'HIGH' ? 'text-red-300' : 'text-yellow-300'}">${finding.risk}</span>
@@ -888,12 +891,12 @@
         function renderAlternatives() {
             return `
                 <div class="space-y-6">
-                    <div class="p-5 rounded-xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30">
+                    <div class="p-5 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
                         <div class="flex items-start gap-3">
-                            <i data-lucide="lightbulb" class="w-6 h-6 text-emerald-400 flex-shrink-0 mt-0.5"></i>
+                            <i data-lucide="lightbulb" class="w-6 h-6 flex-shrink-0 mt-0.5" style="color: #fff;"></i>
                             <div>
-                                <h4 class="font-semibold text-emerald-300 mb-1">Compliant Alternative Suppliers</h4>
-                                <p class="text-sm text-white/60">
+                                <h4 class="font-medium mb-1">Compliant Alternative Suppliers</h4>
+                                <p class="text-sm" style="color: #999;">
                                     Pre-vetted suppliers from non-adversary countries that can replace high-risk BCCs.
                                 </p>
                             </div>
@@ -902,21 +905,21 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         ${ALTERNATIVE_SUPPLIERS.map(alt => `
-                            <div class="p-5 rounded-xl bg-emerald-500/5 border border-emerald-500/20 hover:border-emerald-500/40 transition-all">
+                            <div class="p-5 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
                                 <div class="flex items-center justify-between mb-3">
-                                    <h4 class="font-semibold text-lg">${alt.name}</h4>
-                                    <span class="text-xs px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-300">${alt.country}</span>
+                                    <h4 class="font-medium text-lg">${alt.name}</h4>
+                                    <span class="text-xs px-2 py-1 rounded-full" style="background: rgba(0,255,0,0.2); color: #66ff66;">${alt.country}</span>
                                 </div>
                                 <div class="space-y-2 text-sm">
-                                    <div class="text-white/60">${alt.headquarters}</div>
-                                    <div class="text-white/60">${alt.category}</div>
+                                    <div style="color: #999;">${alt.headquarters}</div>
+                                    <div style="color: #999;">${alt.category}</div>
                                     <div class="flex flex-wrap gap-1 mt-2">
-                                        ${alt.services.map(svc => `<span class="text-xs px-2 py-0.5 rounded-full bg-white/10 text-white/60">${svc}</span>`).join('')}
+                                        ${alt.services.map(svc => `<span class="text-xs px-2 py-0.5 rounded-full" style="background: #1a1a1a; color: #999;">${svc}</span>`).join('')}
                                     </div>
-                                    <div class="pt-3 border-t border-emerald-500/20 mt-3">
-                                        <div class="text-xs text-white/40 mb-1">Can replace:</div>
+                                    <div class="pt-3 mt-3" style="border-top: 1px solid #1a1a1a;">
+                                        <div class="text-xs mb-1" style="color: #666;">Can replace:</div>
                                         <div class="flex flex-wrap gap-1">
-                                            ${alt.replaces.map(r => `<span class="text-xs px-2 py-0.5 rounded-full bg-red-500/20 text-red-300">${r}</span>`).join('')}
+                                            ${alt.replaces.map(r => `<span class="text-xs px-2 py-0.5 rounded-full" style="background: rgba(255,0,0,0.2); color: #ff6666;">${r}</span>`).join('')}
                                         </div>
                                     </div>
                                 </div>
@@ -930,12 +933,12 @@
         function renderWaivers() {
             return `
                 <div class="space-y-6">
-                    <div class="p-5 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30">
+                    <div class="p-5 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
                         <div class="flex items-start gap-3">
-                            <i data-lucide="scale" class="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5"></i>
+                            <i data-lucide="scale" class="w-6 h-6 flex-shrink-0 mt-0.5" style="color: #fff;"></i>
                             <div>
-                                <h4 class="font-semibold text-amber-300 mb-1">Waiver & Removal Process</h4>
-                                <p class="text-sm text-white/60">
+                                <h4 class="font-medium mb-1">Waiver & Removal Process</h4>
+                                <p class="text-sm" style="color: #999;">
                                     Waivers may be granted when no viable alternative exists. BCCs can also request removal from the list.
                                 </p>
                             </div>
@@ -944,64 +947,64 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Waiver Criteria -->
-                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
-                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                                <i data-lucide="file-check" class="w-5 h-5 text-cyan-400"></i>
+                        <div class="p-6 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
+                            <h3 class="text-lg font-medium mb-4 flex items-center gap-2" style="text-transform: uppercase; letter-spacing: 1px;">
+                                <i data-lucide="file-check" class="w-5 h-5" style="color: #fff;"></i>
                                 Potential Waiver Criteria
                             </h3>
                             <div class="space-y-3">
-                                <div class="p-3 rounded-lg bg-white/5 border border-white/10">
-                                    <div class="font-medium text-white/80 mb-1">No Viable Alternative</div>
-                                    <div class="text-sm text-white/50">No domestic or allied supplier can provide equivalent services</div>
+                                <div class="p-3 rounded" style="background: #050505; border: 1px solid #1a1a1a;">
+                                    <div class="font-medium mb-1" style="color: #fff;">No Viable Alternative</div>
+                                    <div class="text-sm" style="color: #666;">No domestic or allied supplier can provide equivalent services</div>
                                 </div>
-                                <div class="p-3 rounded-lg bg-white/5 border border-white/10">
-                                    <div class="font-medium text-white/80 mb-1">National Security Exception</div>
-                                    <div class="text-sm text-white/50">Certain intelligence activities may be exempted</div>
+                                <div class="p-3 rounded" style="background: #050505; border: 1px solid #1a1a1a;">
+                                    <div class="font-medium mb-1" style="color: #fff;">National Security Exception</div>
+                                    <div class="text-sm" style="color: #666;">Certain intelligence activities may be exempted</div>
                                 </div>
-                                <div class="p-3 rounded-lg bg-white/5 border border-white/10">
-                                    <div class="font-medium text-white/80 mb-1">Public Health Emergency</div>
-                                    <div class="text-sm text-white/50">Declared emergencies may trigger temporary exceptions</div>
+                                <div class="p-3 rounded" style="background: #050505; border: 1px solid #1a1a1a;">
+                                    <div class="font-medium mb-1" style="color: #fff;">Public Health Emergency</div>
+                                    <div class="text-sm" style="color: #666;">Declared emergencies may trigger temporary exceptions</div>
                                 </div>
-                                <div class="p-3 rounded-lg bg-white/5 border border-white/10">
-                                    <div class="font-medium text-white/80 mb-1">Overseas Healthcare</div>
-                                    <div class="text-sm text-white/50">Healthcare for US personnel stationed overseas</div>
+                                <div class="p-3 rounded" style="background: #050505; border: 1px solid #1a1a1a;">
+                                    <div class="font-medium mb-1" style="color: #fff;">Overseas Healthcare</div>
+                                    <div class="text-sm" style="color: #666;">Healthcare for US personnel stationed overseas</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Removal Process -->
-                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
-                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                                <i data-lucide="refresh-cw" class="w-5 h-5 text-cyan-400"></i>
+                        <div class="p-6 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
+                            <h3 class="text-lg font-medium mb-4 flex items-center gap-2" style="text-transform: uppercase; letter-spacing: 1px;">
+                                <i data-lucide="refresh-cw" class="w-5 h-5" style="color: #fff;"></i>
                                 BCC Removal Request Process
                             </h3>
                             <div class="space-y-3">
                                 <div class="flex items-start gap-3">
-                                    <div class="w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center text-xs font-bold text-slate-900">1</div>
+                                    <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" style="background: #fff; color: #000;">1</div>
                                     <div>
-                                        <div class="font-medium text-white/80">Submit Request to OMB</div>
-                                        <div class="text-sm text-white/50">BCCs can request removal from the list</div>
+                                        <div class="font-medium" style="color: #fff;">Submit Request to OMB</div>
+                                        <div class="text-sm" style="color: #666;">BCCs can request removal from the list</div>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-3">
-                                    <div class="w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center text-xs font-bold text-slate-900">2</div>
+                                    <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" style="background: #fff; color: #000;">2</div>
                                     <div>
-                                        <div class="font-medium text-white/80">Provide Documentation</div>
-                                        <div class="text-sm text-white/50">Evidence that criteria no longer apply</div>
+                                        <div class="font-medium" style="color: #fff;">Provide Documentation</div>
+                                        <div class="text-sm" style="color: #666;">Evidence that criteria no longer apply</div>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-3">
-                                    <div class="w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center text-xs font-bold text-slate-900">3</div>
+                                    <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" style="background: #fff; color: #000;">3</div>
                                     <div>
-                                        <div class="font-medium text-white/80">Interagency Review</div>
-                                        <div class="text-sm text-white/50">OMB coordinates across agencies</div>
+                                        <div class="font-medium" style="color: #fff;">Interagency Review</div>
+                                        <div class="text-sm" style="color: #666;">OMB coordinates across agencies</div>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-3">
-                                    <div class="w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center text-xs font-bold text-slate-900">4</div>
+                                    <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" style="background: #fff; color: #000;">4</div>
                                     <div>
-                                        <div class="font-medium text-white/80">Decision</div>
-                                        <div class="text-sm text-white/50">OMB updates list if approved</div>
+                                        <div class="font-medium" style="color: #fff;">Decision</div>
+                                        <div class="text-sm" style="color: #666;">OMB updates list if approved</div>
                                     </div>
                                 </div>
                             </div>
@@ -1010,19 +1013,19 @@
 
                     <!-- Your Suppliers Analysis -->
                     ${state.suppliers.filter(s => ['CRITICAL', 'HIGH'].includes(s.risk.level)).length > 0 ? `
-                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
-                            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                                <i data-lucide="target" class="w-5 h-5 text-cyan-400"></i>
+                        <div class="p-6 rounded" style="background: #0a0a0a; border: 1px solid #1a1a1a;">
+                            <h3 class="text-lg font-medium mb-4 flex items-center gap-2" style="text-transform: uppercase; letter-spacing: 1px;">
+                                <i data-lucide="target" class="w-5 h-5" style="color: #fff;"></i>
                                 Your Suppliers - Waiver Consideration
                             </h3>
                             <div class="space-y-3">
                                 ${state.suppliers.filter(s => ['CRITICAL', 'HIGH'].includes(s.risk.level)).map(supplier => `
-                                    <div class="p-4 rounded-xl bg-black/20 border border-white/10">
+                                    <div class="p-4 rounded" style="background: #000; border: 1px solid #1a1a1a;">
                                         <div class="flex items-center justify-between mb-2">
                                             <span class="font-medium">${supplier.name}</span>
                                             <span class="text-xs px-2 py-0.5 rounded-full ${getRiskBadgeClass(supplier.risk.level)}">${supplier.risk.level}</span>
                                         </div>
-                                        <div class="text-sm text-white/60 mb-3">${supplier.category} • ${supplier.country}</div>
+                                        <div class="text-sm mb-3" style="color: #999;">${supplier.category} • ${supplier.country}</div>
                                         <div class="flex items-center gap-2">
                                             ${supplier.alternatives?.length ? `
                                                 <span class="text-xs text-red-300 flex items-center gap-1">
@@ -1053,49 +1056,41 @@
             const app = document.getElementById('app');
             app.innerHTML = `
                 <!-- Header -->
-                <header class="border-b border-white/10 backdrop-blur-xl sticky top-0 z-50">
+                <header style="border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 50; background: #000;">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-5">
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                             <div class="flex items-center gap-3 sm:gap-4">
-                                <div class="relative flex-shrink-0">
-                                    <div class="absolute inset-0 bg-cyan-500 blur-xl opacity-50"></div>
-                                    <i data-lucide="shield" class="w-8 h-8 sm:w-10 sm:h-10 text-cyan-400 relative"></i>
-                                </div>
                                 <div class="min-w-0">
-                                    <h1 class="text-lg sm:text-2xl font-bold tracking-tight truncate">
-                                        <span class="text-cyan-400">BIOSECURE</span>
-                                        <span class="text-white/80 ml-1 sm:ml-2 hidden xs:inline">Compliance</span>
-                                    </h1>
-                                    <p class="text-xs sm:text-sm text-white/50 truncate">Powered by ARBITER • TRAUT</p>
+                                    <h1 class="text-lg sm:text-2xl font-light tracking-tight truncate">BIOSECURE</h1>
+                                    <p class="text-xs sm:text-sm truncate" style="color: #666;">Built on ARBITER™ deterministic semantic infrastructure</p>
                                 </div>
                             </div>
                             <div class="flex items-center gap-2 sm:gap-4">
-                                <input type="text" placeholder="Company Name" value="${state.companyName}" oninput="state.companyName=this.value" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-cyan-500/50 focus:outline-none text-sm w-full sm:w-48">
-                                <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></div>
+                                <input type="text" placeholder="Company Name" value="${state.companyName}" oninput="state.companyName=this.value" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded text-sm w-full sm:w-48" style="background: #0a0a0a; border: 1px solid #1a1a1a; color: #fff;">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Tabs - Horizontally Scrollable on Mobile -->
+                    <!-- Tabs -->
                     <div class="max-w-7xl mx-auto px-4 sm:px-6">
-                        <nav class="tabs-container flex gap-1 pb-px">
-                            <button onclick="setTab('dashboard')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'dashboard' ? 'tab-active' : 'tab-inactive'}">
+                        <nav class="tabs-container flex gap-1">
+                            <button onclick="setTab('dashboard')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'dashboard' ? 'tab-active' : 'tab-inactive'}" style="text-transform: uppercase; letter-spacing: 0.5px;">
                                 <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
                                 <span>Dashboard</span>
                             </button>
-                            <button onclick="setTab('suppliers')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'suppliers' ? 'tab-active' : 'tab-inactive'}">
+                            <button onclick="setTab('suppliers')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'suppliers' ? 'tab-active' : 'tab-inactive'}" style="text-transform: uppercase; letter-spacing: 0.5px;">
                                 <i data-lucide="building-2" class="w-4 h-4"></i>
                                 <span>Suppliers</span>
                             </button>
-                            <button onclick="setTab('contracts')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'contracts' ? 'tab-active' : 'tab-inactive'}">
+                            <button onclick="setTab('contracts')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'contracts' ? 'tab-active' : 'tab-inactive'}" style="text-transform: uppercase; letter-spacing: 0.5px;">
                                 <i data-lucide="file-text" class="w-4 h-4"></i>
                                 <span>Contracts</span>
                             </button>
-                            <button onclick="setTab('alternatives')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'alternatives' ? 'tab-active' : 'tab-inactive'}">
+                            <button onclick="setTab('alternatives')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'alternatives' ? 'tab-active' : 'tab-inactive'}" style="text-transform: uppercase; letter-spacing: 0.5px;">
                                 <i data-lucide="lightbulb" class="w-4 h-4"></i>
                                 <span>Alternatives</span>
                             </button>
-                            <button onclick="setTab('waivers')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'waivers' ? 'tab-active' : 'tab-inactive'}">
+                            <button onclick="setTab('waivers')" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${state.activeTab === 'waivers' ? 'tab-active' : 'tab-inactive'}" style="text-transform: uppercase; letter-spacing: 0.5px;">
                                 <i data-lucide="scale" class="w-4 h-4"></i>
                                 <span>Waivers</span>
                             </button>
@@ -1113,16 +1108,13 @@
                 </main>
 
                 <!-- Footer -->
-                <footer class="border-t border-white/10 mt-16">
+                <footer style="border-top: 1px solid #1a1a1a; margin-top: 64px;">
                     <div class="max-w-7xl mx-auto px-6 py-6">
                         <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                            <div class="flex items-center gap-3">
-                                <i data-lucide="shield" class="w-5 h-5 text-cyan-400"></i>
-                                <span class="text-white/50 text-sm">TRAUT Applied Research © 2026</span>
-                            </div>
-                            <div class="text-xs text-white/30 text-center md:text-right">
-                                ARBITER Coherence Engine • Deterministic Semantic Analysis • 26MB • No LLM Hallucination<br>
-                                Section 851, NDAA FY2025 • Not Legal Advice • Consult Counsel for Compliance Decisions
+                            <div class="text-xs" style="color: #666;">Actual General Intelligence, Inc. © 2026</div>
+                            <div class="text-xs text-center md:text-right" style="color: #666;">
+                                BIOSECURE Act Section 851, NDAA FY2025<br>
+                                Informational Tool • Not Legal Advice • Consult Qualified Counsel
                             </div>
                         </div>
                     </div>
